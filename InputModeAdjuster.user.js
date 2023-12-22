@@ -12,6 +12,7 @@
     'use strict';
 
     // Function to change input mode for email, telephone, and postal code fields
+    // see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
     function changeInputModeForVariousFields() {
         // Find all input elements
         const inputs = document.querySelectorAll('input');
