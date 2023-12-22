@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Input Mode Adjuster
 // @namespace    https://github.com/kofaysi/
-// @version      0.1
+// @version      0.2
 // @description  Changes inputmode for input fields with id or placeholder containing "keywords"
 // @author       Milan Berta
 // @match        *://*/*
@@ -20,8 +20,8 @@
             // Check if id or placeholder contains 'email', 'e-mail', 'telephone', 'phone', 'tel', or 'postal code'
             const isEmailInput = /e-?mail/i.test(input.id) || /e-?mail/i.test(input.placeholder);
             const isTelephoneInput = /(phone|tel)/i.test(input.id) || /(phone|tel)/i.test(input.placeholder);
-            const isPostalCodeInput = /(postal\s?code|PSČ|směrovací)/i.test(input.id) || /(postal\s?code|PSČ|směrovací)/i.test(input.placeholder);
-
+            const isPostalCodeInput = /(code|PSČ|směřovací)/i.test(input.id) || /(code|PSČ|směřovací)/i.test(input.placeholder) || /(code|PSČ|směřovací)/i.test(input.name);
+            
             if (isEmailInput) {
                 // Set inputmode to 'email'
                 input.inputMode = 'email';
