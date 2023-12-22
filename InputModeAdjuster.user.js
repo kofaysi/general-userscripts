@@ -20,7 +20,7 @@
             // Check if id or placeholder contains 'email', 'e-mail', 'telephone', 'phone', 'tel', or 'postal code'
             const isEmailInput = /e-?mail/i.test(input.id) || /e-?mail/i.test(input.placeholder);
             const isTelephoneInput = /(phone|tel)/i.test(input.id) || /(phone|tel)/i.test(input.placeholder);
-            const isPostalCodeInput = /postal\s?code/i.test(input.id) || /postal\s?code/i.test(input.placeholder);
+            const isPostalCodeInput = /(postal\s?code|PSČ|směrovací)/i.test(input.id) || /(postal\s?code|PSČ|směrovací)/i.test(input.placeholder);
 
             if (isEmailInput) {
                 // Set inputmode to 'email'
