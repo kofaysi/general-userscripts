@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Input Mode Adjuster
-// @namespace    https://github.com/kofaysi/
+// @namespace    https://github.com/kofaysi/general-userscripts/edit/main/InputModeAdjuster.user.js
 // @version      2024-01-11
 // @description  Changes inputmode for input fields with id or placeholder containing "keywords"
-// @author       Milan Berta
+// @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
