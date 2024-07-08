@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2024-01-16
 // @description  Automatically add spellcheck attribute to textarea elements
-// @author       Your Name
+// @author       kofaysi@gitlab.com
 // @match        https://community.e.foundation/*
 // @grant        none
 // ==/UserScript==
