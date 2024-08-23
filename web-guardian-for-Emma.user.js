@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Website Blocker
-// @namespace    http://tampermonkey.net/
-// @version      1.8
+// @namespace    http://your-namespace-here.net/
+// @version      1.9
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -48,7 +48,7 @@
                 border: 2px solid #add8e6;
                 border-radius: 10px;
                 padding: 20px;
-                background-color: #e6f7ff;
+                background-color: #ffffff; /* Force white background */
                 max-width: 600px;
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
             }
@@ -59,7 +59,8 @@
                 color: #ff0000; /* English - Red */
             }
             .blocker-message p.en-white {
-                color: #ffffff; /* English - White */
+                color: #000000; /* English - White text on white background */
+                background-color: #ffffff; /* Ensure white background */
             }
             .blocker-message p.en-blue {
                 color: #0000ff; /* English - Blue */
@@ -93,7 +94,7 @@
                 <div class="blocker-message">
                     <h1>This website is blocked.</h1>
                     <p class="en-red">Dear intruder, this page is not on the whitelist.</p>
-                    <p class="en-white" style="background-color: #000000;">Ask your papa to whitelist this page for further browsing.</p>
+                    <p class="en-white">Ask your papa to whitelist this page for further browsing.</p>
                     <p class="en-blue">Repeated attempts to visit this page might lead to more chores and errands.</p>
                     <br>
                     <p class="de-black">Lieber Eindringling, diese Seite steht nicht auf der Whitelist.</p>
