@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         GitLab Button Color Changer
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/kofaysi/
 // @version      2024-08-06
 // @description  Change button icon color on GitLab
 // @author       https://github.com/kofaysi/
