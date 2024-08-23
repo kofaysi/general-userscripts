@@ -13,12 +13,12 @@
 
     // Define the list of allowed domains (whitelist)
     const whitelist = [
-        /.*\.google\..*/,         // Google and related services
-        /.*\.wikipedia\..*/,      // Wikipedia
-        /.*\.encyclopedia\..*/,   // Other encyclopedias
-        /.*\.github\.com/,        // GitHub
-        /.*\.mapy\.cz/,           // mapy.cz
-        /.*\.seznam\.cz/          // seznam.cz
+        /.*\.google\..*/,          // Google and related services
+        /.*\.wikipedia\..*/,       // Wikipedia
+        /.*\.encyclopedia\..*/,    // Other encyclopedias
+        /.*github\.com.*/,         // GitHub (updated pattern)
+        /.*\.mapy\.cz/,            // mapy.cz
+        /.*\.seznam\.cz/           // seznam.cz
     ];
 
     // Get the current domain
