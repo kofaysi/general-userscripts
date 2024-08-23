@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NSFWAlbum Linkify Titles
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/kofaysi/
 // @version      2024-08-01
 // @description  Linkify titles on nsfwalbum.com, handling both dash and en dash
 // @author       
