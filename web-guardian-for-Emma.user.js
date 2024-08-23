@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Website Blocker
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.8
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -13,12 +13,17 @@
 
     // Define the list of allowed domains (whitelist)
     const whitelist = [
-        /.*\.google\..*/,          // Google and related services
-        /.*\.wikipedia\..*/,       // Wikipedia
-        /.*encyclopedia\..*/,    // Other encyclopedias
-        /.*github\.com.*/,         // GitHub (updated pattern)
-        /.*mapy\.cz/,            // mapy.cz
-        /.*seznam\.cz/           // seznam.cz
+        /.*\.?google\..*/,          // Google and related services (optional period)
+        /.*\.?wikipedia\..*/,       // Wikipedia (optional period)
+        /.*\.?encyclopedia\..*/,    // Other encyclopedias (optional period)
+        /.*\.?github\.com.*/,       // GitHub (optional period)
+        /.*\.?mapy\.cz/,            // mapy.cz (optional period)
+        /.*\.?seznam\.cz/,          // seznam.cz (optional period)
+        /.*\.?murena\.io/,          // murena.io (optional period)
+        /.*\.?duckduckgo\.com/,     // DuckDuckGo (optional period)
+        /.*\.?qwant\.com/,          // Qwant (optional period)
+        /.*\.?zatrolene-hry\.cz/,   // zatrolene-hry.cz (optional period)
+        /.*\.?boardgamegeek\.com/   // boardgamegeek.com (optional period)
     ];
 
     // Get the current domain
@@ -29,17 +34,76 @@
 
     // If not whitelisted, redirect to a blocked page or display a blocking message
     if (!isWhitelisted) {
+        const styles = `
+            .blocker-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                text-align: center;
+                background-color: #f0f8ff;
+            }
+            .blocker-message {
+                border: 2px solid #add8e6;
+                border-radius: 10px;
+                padding: 20px;
+                background-color: #e6f7ff;
+                max-width: 600px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+            .blocker-message h1 {
+                color: #005b96;
+            }
+            .blocker-message p.en-red {
+                color: #ff0000; /* English - Red */
+            }
+            .blocker-message p.en-white {
+                color: #ffffff; /* English - White */
+            }
+            .blocker-message p.en-blue {
+                color: #0000ff; /* English - Blue */
+            }
+            .blocker-message p.de-black {
+                color: #000000; /* German - Black */
+            }
+            .blocker-message p.de-red {
+                color: #ff0000; /* German - Red */
+            }
+            .blocker-message p.de-gold {
+                color: #ffd700; /* German - Gold */
+            }
+            .blocker-message p.es-red {
+                color: #ff0000; /* Spanish - Red */
+            }
+            .blocker-message p.es-yellow {
+                color: #ffd700; /* Spanish - Yellow */
+            }
+        `;
+
+        // Inject CSS styles into the head
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = styles;
+        document.head.appendChild(styleSheet);
+
+        // Display blocking message
         document.body.innerHTML = `
-            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center;">
-                <h1>This website is blocked.</h1>
-                <p>Dear intruder, ask your papa to whitelist this page for further browsing.</p>
-                <p>In rare cases, a repeated attempt to visit this page will cause serious restrictions regarding more house-works and running errands.</p>
-                <br>
-                <p>Lieber Eindringling, bitte deinen Papa, diese Seite auf die Whitelist zu setzen, damit du weiter surfen kannst.</p>
-                <p>In seltenen Fällen kann ein erneuter Versuch, diese Seite zu besuchen, zu ernsthaften Einschränkungen führen, die mehr Hausarbeiten und Besorgungen betreffen.</p>
-                <br>
-                <p>Querido intruso, pídele a tu papá que ponga esta página en la lista blanca para continuar navegando.</p>
-                <p>En raros casos, un intento repetido de visitar esta página causará serias restricciones relacionadas con más tareas domésticas y recados.</p>
+            <div class="blocker-container">
+                <div class="blocker-message">
+                    <h1>This website is blocked.</h1>
+                    <p class="en-red">Dear intruder, this page is not on the whitelist.</p>
+                    <p class="en-white" style="background-color: #000000;">Ask your papa to whitelist this page for further browsing.</p>
+                    <p class="en-blue">Repeated attempts to visit this page might lead to more chores and errands.</p>
+                    <br>
+                    <p class="de-black">Lieber Eindringling, diese Seite steht nicht auf der Whitelist.</p>
+                    <p class="de-red">Bitte deinen Papa, diese Seite für weiteres Surfen auf die Whitelist zu setzen.</p>
+                    <p class="de-gold">Wiederholte Versuche könnten zu mehr Hausarbeiten und Besorgungen führen.</p>
+                    <br>
+                    <p class="es-red">Querido intruso, esta página no está en la lista blanca.</p>
+                    <p class="es-yellow">Pídele a tu papá que ponga esta página en la lista blanca para continuar navegando.</p>
+                    <p class="es-red">Intentos repetidos podrían llevar a más tareas domésticas y recados.</p>
+                </div>
             </div>
         `;
         document.title = "Blocked";
