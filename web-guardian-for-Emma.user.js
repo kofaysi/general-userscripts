@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Website Blocker
-// @namespace    http://your-namespace-here.net/
+// @namespace    https://github.com/kofaysi/
 // @version      1.9
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
