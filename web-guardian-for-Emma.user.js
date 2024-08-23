@@ -5,7 +5,7 @@
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
-// @grant        none
+// @grant        none`
 // ==/UserScript==
 
 (function() {
