@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Email Input Mode Adjuster
-// @namespace    https://github.com/kofaysi/general-userscripts/edit/main/EmailInputModeAdjuster.user.js
+// @namespace    https://github.com/kofaysi/
 // @version      0.1
 // @description  Changes inputmode for input fields with id or placeholder containing 'email' or 'e-mail'
 // @author       https://github.com/kofaysi
