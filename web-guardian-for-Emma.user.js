@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Website Blocker
 // @namespace    https://github.com/kofaysi/
-// @version      1.9
+// @version      1.10
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -80,6 +80,11 @@
             .blocker-message p.es-yellow {
                 color: #ffd700; /* Spanish - Yellow */
             }
+            .blocker-message hr {
+                border: none;
+                border-top: 1px solid #ccc;
+                margin: 20px 0;
+            }
         `;
 
         // Inject CSS styles into the head
@@ -88,7 +93,7 @@
         styleSheet.innerText = styles;
         document.head.appendChild(styleSheet);
 
-        // Display blocking message
+        // Display blocking message with dividers
         document.body.innerHTML = `
             <div class="blocker-container">
                 <div class="blocker-message">
@@ -96,11 +101,11 @@
                     <p class="en-red">Dear intruder, this page is not on the whitelist.</p>
                     <p class="en-white">Ask your papa to whitelist this page for further browsing.</p>
                     <p class="en-blue">Repeated attempts to visit this page might lead to more chores and errands.</p>
-                    <br>
+                    <hr>
                     <p class="de-black">Lieber Eindringling, diese Seite steht nicht auf der Whitelist.</p>
                     <p class="de-red">Bitte deinen Papa, diese Seite für weiteres Surfen auf die Whitelist zu setzen.</p>
                     <p class="de-gold">Wiederholte Versuche könnten zu mehr Hausarbeiten und Besorgungen führen.</p>
-                    <br>
+                    <hr>
                     <p class="es-red">Querido intruso, esta página no está en la lista blanca.</p>
                     <p class="es-yellow">Pídele a tu papá que ponga esta página en la lista blanca para continuar navegando.</p>
                     <p class="es-red">Intentos repetidos podrían llevar a más tareas domésticas y recados.</p>
