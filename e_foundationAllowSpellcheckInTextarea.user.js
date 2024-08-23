@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Add Spellcheck to Textarea
-// @namespace    https://github.com/kofaysi/general-userscripts/edit/main/e_foundationAllowSpellcheckInTextarea.user.js
+// @namespace    https://github.com/kofaysi/
 // @version      2024-01-16
 // @description  Automatically add spellcheck attribute to textarea elements
 // @author       https://github.com/kofaysi/
