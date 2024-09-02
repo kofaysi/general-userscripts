@@ -18,11 +18,11 @@
 
         // Remove any background image from the body
         bodyElement.style.backgroundImage = 'none';
-        bodyElement.style.background = '#000000'; // Set to a dark background color to prevent white flash
+        //bodyElement.style.background = '#000000'; // Set to a dark background color to prevent white flash
     }
 
     // Immediately set a dark background color to prevent white flash before DOM is fully loaded
-    document.documentElement.style.background = '#000000'; // Set a dark color for the entire HTML
+    //document.documentElement.style.background = '#000000'; // Set a dark color for the entire HTML
 
     // Ensure the function runs as soon as possible
     if (document.readyState === 'loading') {
