@@ -25,7 +25,7 @@
         titles.forEach(title => {
             var titleText = title.textContent;
             // Split title text by both dash and en dash
-            var parts = titleText.split(/ - | – /);
+            var parts = titleText.split(/ ?- | ?– /);
 
             // Process each part of the title
             var firstWord = parts[0].split(' ')[0];
