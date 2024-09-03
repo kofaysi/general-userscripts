@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name Replace Duplicate Starting Letters
-// @namespace http://tampermonkey.net/
-// @version 0.1
-// @description Replace duplicate starting letters of words with single letters in a specific editor
-// @author You
-// @match ://zatrolene-hry.cz/*
-// @grant none
+// @name         Replace Duplicate Starting Letters
+// @namespace    https://github.com/kofaysi/
+// @version      0.2
+// @description  Replace duplicate starting letters of words with single letters in a specific editor
+// @author       https://github.com/kofaysi/
+// @match        *://www.zatrolene-hry.cz/*
+// @grant        none
 // ==/UserScript==
 
 (function() {
