@@ -4,7 +4,7 @@
 // @version      0.2
 // @description  Replace duplicate starting letters of words with single letters in a specific editor
 // @author       https://github.com/kofaysi/
-// @match        *://www.zatrolene-hry.cz/*
+// @match        https://www.zatrolene-hry.cz/*
 // @grant        none
 // ==/UserScript==
 
