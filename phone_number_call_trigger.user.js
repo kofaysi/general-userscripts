@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Phone Number Call Button Overlay with Number Formatting
+// @name         Phone Number Call Button Overlay with Disappearing Button
 // @namespace    http://tampermonkey.net/
-// @version      1.5
-// @description  Detects formatted phone number selection, creates a call button overlay, includes an Easter egg for debugging. Mobile touch events supported.
+// @version      1.6
+// @description  Detects phone number selection, creates a call button overlay, removes the button when selection is not active. Includes an Easter egg for debugging. Mobile touch events supported.
 // @author       ChatGPT
 // @match        *://*/*
 // @grant        none
@@ -20,13 +20,18 @@
         return text.replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim();
     }
 
-    // Function to create a call button overlay
-    function createCallButton(phoneNumber) {
-        // Remove existing button if present
+    // Function to remove the call button overlay
+    function removeCallButton() {
         let existingButton = document.getElementById('callButtonOverlay');
         if (existingButton) {
             existingButton.remove();
         }
+    }
+
+    // Function to create a call button overlay
+    function createCallButton(phoneNumber) {
+        // Remove existing button if present
+        removeCallButton();
 
         // Create a new button element
         const button = document.createElement('button');
@@ -64,6 +69,9 @@
                 // Call createCallButton with '123' for the Easter egg when "phone" is selected
                 createCallButton(selectedText.toLowerCase() === "phone" ? '123' : formattedText);
             }
+        } else {
+            // Remove the button if no text is selected
+            removeCallButton();
         }
     }
 
