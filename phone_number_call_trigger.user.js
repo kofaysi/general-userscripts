@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button
 // @namespace    https://github.com/kofaysi/
-// @version      1.7
-// @description  Adds buttons for Call, Send SMS, and Copy when phone number is selected. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported.
+// @version      1.8
+// @description  Adds floating buttons for Call, Send SMS, and Copy when phone number is selected. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -16,8 +16,7 @@
 
     // Function to format the selected text (remove parentheses, replace dashes/periods with spaces)
     function formatPhoneNumber(text) {
-        // Remove parentheses, replace periods and dashes with spaces
-        return text.replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim();
+        return text.replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim(); // Remove parentheses, replace periods and dashes with spaces
     }
 
     // Function to remove the button container overlay
@@ -32,14 +31,15 @@
     function createButton(label, onClick) {
         const button = document.createElement('button');
         button.textContent = label;
-        button.style.padding = '20px';
+        button.style.padding = '15px';
         button.style.fontSize = '16px';
-        button.style.margin = '0 10px'; // Margin between buttons
+        button.style.margin = '0 5px'; // Spacing between buttons
         button.style.backgroundColor = '#4CAF50';
         button.style.color = 'white';
         button.style.border = 'none';
-        button.style.borderRadius = '10px';
+        button.style.borderRadius = '8px';
         button.style.cursor = 'pointer';
+        button.style.flex = '1'; // Ensure buttons take equal space
         button.onclick = onClick;
         return button;
     }
@@ -53,12 +53,31 @@
         const container = document.createElement('div');
         container.id = 'buttonContainerOverlay';
         container.style.position = 'fixed';
-        container.style.bottom = '10px';
+        container.style.bottom = '20px';
         container.style.left = '0';
         container.style.right = '0';
         container.style.zIndex = '9999';
         container.style.display = 'flex';
-        container.style.justifyContent = 'center'; // Center buttons horizontally
+        container.style.justifyContent = 'center';
+        container.style.padding = '0 20px';
+        container.style.width = '100%'; // Take full width of the screen
+        container.style.boxSizing = 'border-box'; // Ensure padding is counted within the width
+        container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Semi-transparent background for the button container
+
+        // Create the Copy button
+        const copyButton = createButton('Copy', function() {
+            navigator.clipboard.writeText(phoneNumber).then(() => {
+                alert('Phone number copied: ' + phoneNumber); // Confirmation alert
+            }).catch(err => {
+                alert('Failed to copy text: ', err);
+            });
+        });
+
+        // Create the Send SMS button
+        const smsButton = createButton('SMS', function() {
+            alert('Opening SMS to: ' + phoneNumber); // Debugging alert
+            window.location.href = `sms:${phoneNumber.replace(/\s/g, '')}`;
+        });
 
         // Create the Call button
         const callButton = createButton('Call', function() {
@@ -66,25 +85,10 @@
             window.location.href = `tel:${phoneNumber.replace(/\s/g, '')}`;
         });
 
-        // Create the Send SMS button
-        const smsButton = createButton('Send SMS', function() {
-            alert('Opening SMS to: ' + phoneNumber); // Debugging alert
-            window.location.href = `sms:${phoneNumber.replace(/\s/g, '')}`;
-        });
-
-        // Create the Copy button
-        const copyButton = createButton('Copy', function() {
-            navigator.clipboard.writeText(phoneNumber).then(() => {
-                alert('Phone number copied: ' + phoneNumber); // Debugging alert
-            }).catch(err => {
-                alert('Failed to copy text: ', err);
-            });
-        });
-
         // Append buttons to the container
-        container.appendChild(callButton);
-        container.appendChild(smsButton);
         container.appendChild(copyButton);
+        container.appendChild(smsButton);
+        container.appendChild(callButton);
 
         // Append the container to the body
         document.body.appendChild(container);
