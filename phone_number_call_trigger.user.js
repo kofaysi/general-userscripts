@@ -14,7 +14,7 @@
     // Function to validate phone numbers (simple regex for demonstration)
     function isValidPhoneNumber(text) {
         // Basic regex for phone numbers (adjust as necessary)
-        const phoneRegex = /(\+?\d{1,4}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?[\d-.\s]{7,10}/;
+        const phoneRegex = /^(\+?\(?\d{3,4}\)?)?\s?\d{3}\s?\d{3}\s?\d{3}$/;
         return phoneRegex.test(text);
     }
 
