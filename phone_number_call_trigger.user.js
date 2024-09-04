@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Phone Number Call Button Overlay with Easter Egg
+// @name         Phone Number Call Button Overlay with Easter Egg (Mobile Compatible)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Detects phone number selection, creates a call button overlay, and includes an Easter egg for debugging.
+// @version      1.3
+// @description  Detects phone number selection, creates a call button overlay, and includes an Easter egg for debugging. Mobile touch events supported.
 // @author       ChatGPT
 // @match        *://*/*
 // @grant        none
@@ -39,6 +39,7 @@
 
         // Set the button to make a call when clicked
         button.onclick = function() {
+            alert('Initiating call to: ' + phoneNumber); // Debugging alert
             window.location.href = `tel:${phoneNumber.replace(/\s/g, '')}`;
         };
 
@@ -46,21 +47,29 @@
         document.body.appendChild(button);
     }
 
-    // Monitor for text selection
-    document.addEventListener('mouseup', function() {
+    // Function to handle text selection on mobile and desktop
+    function handleTextSelection() {
         const selectedText = window.getSelection().toString().trim();
-        if (phoneRegex.test(selectedText) || selectedText.toLowerCase() === "phone") {
-            // Call createCallButton with '123' for the Easter egg when "phone" is selected
-            createCallButton(selectedText.toLowerCase() === "phone" ? '123' : selectedText);
+        if (selectedText) {
+            if (phoneRegex.test(selectedText) || selectedText.toLowerCase() === "phone") {
+                // Call createCallButton with '123' for the Easter egg when "phone" is selected
+                createCallButton(selectedText.toLowerCase() === "phone" ? '123' : selectedText);
+            }
         }
-    });
+    }
+
+    // Monitor for text selection on mobile (touchend) and desktop (mouseup)
+    document.addEventListener('mouseup', handleTextSelection);
+    document.addEventListener('touchend', handleTextSelection);
 
     // Monitor clipboard for potential phone number
     document.addEventListener('paste', function(event) {
         const clipboardText = (event.clipboardData || window.clipboardData).getData('text').trim();
-        if (phoneRegex.test(clipboardText) || clipboardText.toLowerCase() === "phone") {
-            // Call createCallButton with '123' for the Easter egg when "phone" is selected
-            createCallButton(clipboardText.toLowerCase() === "phone" ? '123' : clipboardText);
+        if (clipboardText) {
+            if (phoneRegex.test(clipboardText) || clipboardText.toLowerCase() === "phone") {
+                // Call createCallButton with '123' for the Easter egg when "phone" is selected
+                createCallButton(clipboardText.toLowerCase() === "phone" ? '123' : clipboardText);
+            }
         }
     });
 
