@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/kofaysi/
 // @version      1.6
 // @description  Detects phone number selection, creates a call button overlay, removes the button when selection is not active. Includes an Easter egg for debugging. Mobile touch events supported.
-// @author       ChatGPT
+// @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
