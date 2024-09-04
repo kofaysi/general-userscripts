@@ -2,7 +2,7 @@
 // @name         Phone Number Call Button Overlay with Disappearing Button
 // @namespace    https://github.com/kofaysi/
 // @version      1.7
-// @description  Detects phone number selection, creates a call, SMS, and copy button overlay, removes the button when selection is not active. Includes an Easter egg for debugging. Mobile touch events supported.
+// @description  Adds buttons for Call, Send SMS, and Copy when phone number is selected. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -20,63 +20,74 @@
         return text.replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim();
     }
 
-    // Function to remove all buttons (Call, SMS, Copy)
-    function removeButtons() {
-        const buttonIds = ['callButtonOverlay', 'smsButtonOverlay', 'copyButtonOverlay'];
-        buttonIds.forEach(buttonId => {
-            let existingButton = document.getElementById(buttonId);
-            if (existingButton) {
-                existingButton.remove();
-            }
-        });
+    // Function to remove the button container overlay
+    function removeButtonContainer() {
+        let existingContainer = document.getElementById('buttonContainerOverlay');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
     }
 
-    // Function to create a button element
-    function createButton(id, text, action) {
+    // Function to create a button
+    function createButton(label, onClick) {
         const button = document.createElement('button');
-        button.id = id;
-        button.textContent = text;
-        button.style.position = 'fixed';
-        button.style.bottom = `${10 + (50 * document.getElementsByTagName('button').length)}px`; // Position them dynamically below each other
-        button.style.right = '10px';
-        button.style.zIndex = '9999';
-        button.style.padding = '15px';
+        button.textContent = label;
+        button.style.padding = '20px';
         button.style.fontSize = '16px';
+        button.style.margin = '0 10px'; // Margin between buttons
         button.style.backgroundColor = '#4CAF50';
         button.style.color = 'white';
         button.style.border = 'none';
         button.style.borderRadius = '10px';
         button.style.cursor = 'pointer';
-        button.onclick = action;
-
-        document.body.appendChild(button);
+        button.onclick = onClick;
+        return button;
     }
 
-    // Function to create Call, SMS, and Copy buttons
-    function createButtons(phoneNumber) {
-        // Remove existing buttons if present
-        removeButtons();
+    // Function to create the button container and add buttons
+    function createButtonContainer(phoneNumber) {
+        // Remove existing button container if present
+        removeButtonContainer();
 
-        // Create "Call" button
-        createButton('callButtonOverlay', 'Call ' + phoneNumber, function() {
+        // Create a container for the buttons
+        const container = document.createElement('div');
+        container.id = 'buttonContainerOverlay';
+        container.style.position = 'fixed';
+        container.style.bottom = '10px';
+        container.style.left = '0';
+        container.style.right = '0';
+        container.style.zIndex = '9999';
+        container.style.display = 'flex';
+        container.style.justifyContent = 'center'; // Center buttons horizontally
+
+        // Create the Call button
+        const callButton = createButton('Call', function() {
+            alert('Initiating call to: ' + phoneNumber); // Debugging alert
             window.location.href = `tel:${phoneNumber.replace(/\s/g, '')}`;
         });
 
-        // Create "Send SMS" button
-        createButton('smsButtonOverlay', 'Send SMS', function() {
+        // Create the Send SMS button
+        const smsButton = createButton('Send SMS', function() {
+            alert('Opening SMS to: ' + phoneNumber); // Debugging alert
             window.location.href = `sms:${phoneNumber.replace(/\s/g, '')}`;
         });
 
-        // Create "Copy" button
-        createButton('copyButtonOverlay', 'Copy', function() {
-            navigator.clipboard.writeText(phoneNumber)
-                .then(() => {
-                    alert('Phone number copied: ' + phoneNumber);
-                })
-                .catch(err => {
-                    alert('Failed to copy phone number: ' + err);
-                });
+        // Create the Copy button
+        const copyButton = createButton('Copy', function() {
+            navigator.clipboard.writeText(phoneNumber).then(() => {
+                alert('Phone number copied: ' + phoneNumber); // Debugging alert
+            }).catch(err => {
+                alert('Failed to copy text: ', err);
+            });
         });
+
+        // Append buttons to the container
+        container.appendChild(callButton);
+        container.appendChild(smsButton);
+        container.appendChild(copyButton);
+
+        // Append the container to the body
+        document.body.appendChild(container);
     }
 
     // Function to handle text selection
@@ -86,12 +97,12 @@
             // Format the selected text before matching with regex
             const formattedText = formatPhoneNumber(selectedText);
             if (phoneRegex.test(formattedText) || selectedText.toLowerCase() === "phone") {
-                // Call createButtons with '123' for the Easter egg when "phone" is selected
-                createButtons(selectedText.toLowerCase() === "phone" ? '123' : formattedText);
+                // Call createButtonContainer with '123' for the Easter egg when "phone" is selected
+                createButtonContainer(selectedText.toLowerCase() === "phone" ? '123' : formattedText);
             }
         } else {
-            // Remove the buttons if no text is selected
-            removeButtons();
+            // Remove the button container if no text is selected
+            removeButtonContainer();
         }
     }
 
@@ -105,8 +116,8 @@
             // Format the clipboard text before matching with regex
             const formattedClipboardText = formatPhoneNumber(clipboardText);
             if (phoneRegex.test(formattedClipboardText) || clipboardText.toLowerCase() === "phone") {
-                // Call createButtons with '123' for the Easter egg when "phone" is selected
-                createButtons(clipboardText.toLowerCase() === "phone" ? '123' : formattedClipboardText);
+                // Call createButtonContainer with '123' for the Easter egg when "phone" is selected
+                createButtonContainer(clipboardText.toLowerCase() === "phone" ? '123' : formattedClipboardText);
             }
         }
     });
