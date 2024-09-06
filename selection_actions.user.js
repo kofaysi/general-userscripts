@@ -169,6 +169,13 @@
     function handleTextSelection() {
         const selectedText = window.getSelection().toString().trim();
 
+        // Check if the selection is a valid identity number
+        if (selectedText && identityRegex.test(selectedText)) {
+            const formattedIdentity = formatIdentity(selectedText);
+            createButtonContainer(null, null, formattedIdentity);
+            return;
+        }
+        
         // Check if the selection is a valid phone number
         if (selectedText) {
             const formattedText = formatPhoneNumber(selectedText);
@@ -181,13 +188,6 @@
         // Check if the selection is a valid address
         if (selectedText && isValidAddress(selectedText)) {
             createButtonContainer(null, selectedText);
-            return;
-        }
-
-        // Check if the selection is a valid identity number
-        if (selectedText && identityRegex.test(selectedText)) {
-            const formattedIdentity = formatIdentity(selectedText);
-            createButtonContainer(null, null, formattedIdentity);
             return;
         }
 
@@ -204,8 +204,14 @@
         if (clipboardText) {
             const formattedClipboardText = formatPhoneNumber(clipboardText);
 
+            // Check for an identity number
+            if (identityRegex.test(clipboardText)) {
+                const formattedIdentity = formatIdentity(clipboardText);
+                createButtonContainer(null, null, formattedIdentity);
+            }
+        
             // Check for a phone number
-            if (phoneRegex.test(formattedClipboardText)) {
+            else if (phoneRegex.test(formattedClipboardText)) {
                 createButtonContainer(formattedClipboardText);
             }
 
@@ -214,11 +220,7 @@
                 createButtonContainer(null, clipboardText);
             }
 
-            // Check for an identity number
-            else if (identityRegex.test(clipboardText)) {
-                const formattedIdentity = formatIdentity(clipboardText);
-                createButtonContainer(null, null, formattedIdentity);
-            }
+
         }
     });
 
