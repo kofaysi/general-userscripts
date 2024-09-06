@@ -12,7 +12,7 @@
     'use strict';
 
     // Booleans to control the visibility of the buttons
-    const showCopy = true;  // Show Copy button (only if SMS or Call is true)
+    const showCopy = true;  // Show Copy button (only if SMS or Call is true, or address is valid)
     const showSMS = true;   // Show SMS button
     const showCall = true;  // Show Call button
     const showMap = true;   // Show Map button (for valid addresses)
@@ -76,8 +76,8 @@
         // Remove existing button container if present
         removeButtonContainer();
 
-        // Check if Copy should be shown (only if either SMS or Call is true, and if address exists)
-        const showCopyButton = showCopy && address;
+        // Check if Copy should be shown (only if either SMS or Call is true, or address is valid)
+        const showCopyButton = showCopy && (showSMS || showCall || address);
 
         // If none of the buttons should be shown, return early
         if (!showCopyButton && !showSMS && !showCall && (!showMap || !address)) return;
@@ -100,8 +100,9 @@
         // Conditionally create and append the Copy button
         if (showCopyButton) {
             const copyButton = createButton('Copy', function() {
-                navigator.clipboard.writeText(address).then(() => {
-                    alert('Address copied: ' + address); // Confirmation alert
+                const textToCopy = phoneNumber ? phoneNumber : address;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert(`${phoneNumber ? 'Phone number' : 'Address'} copied: ${textToCopy}`); // Confirmation alert
                 }).catch(err => {
                     alert('Failed to copy text: ', err);
                 });
