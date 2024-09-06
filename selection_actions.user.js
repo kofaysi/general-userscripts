@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
-// @version      2.0
-// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID). Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
+// @version      2.1
+// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -16,7 +16,7 @@
     const showSMS = true;   // Show SMS button
     const showCall = true;  // Show Call button
     const showMap = true;   // Show Map button (for valid addresses)
-    const showOpenIdentityURL = true; // Show Open Identity URL button for valid identity numbers (IČ, IČO, ID)
+    const showOpenIdentityURL = true; // Show Open Identity URL button for valid identity numbers (IČ, IČO, ID, DIČ)
 
     // Regex to match the formatted phone number
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}$/;
@@ -24,8 +24,8 @@
     // Regex to detect invalid special characters
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
-    // Regex to detect a valid identity number (IČ, IČO, ID)
-    const identityRegex = /(?:IČ|IČO|ID)\s?\d{7,8}/i;
+    // Regex to detect a valid identity number (IČ, IČO, ID, DIČ with optional "CZ" prefix)
+    const identityRegex = /(?:IČ|IČO|ID|DIČ)\:?\s?(CZ)?[\d\s]{7,8}/i;
 
     // Function to format the selected text for an identity number
     function formatIdentity(text) {
