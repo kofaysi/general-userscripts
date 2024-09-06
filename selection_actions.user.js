@@ -25,7 +25,7 @@
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
     // Regex to detect a valid identity number (IČ, IČO, ID, DIČ with optional "CZ" prefix)
-    const identityRegex = /(?:IČ|IČO|ID|DIČ)\:?\s?(CZ)?[\d\s]{7,8}/i;
+    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?[\d\s]{7,8}/i;
 
     // Function to format the selected text for an identity number
     function formatIdentity(text) {
