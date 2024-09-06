@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button
 // @namespace    https://github.com/kofaysi/
-// @version      1.8
-// @description  Adds floating buttons for Call, Send SMS, Copy, and Map when a phone number or address is selected. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported. Map button opens in the default map application using geo URI.
+// @version      1.9
+// @description  Adds floating buttons for Call, Send SMS, Copy, and Map when a phone number or address is selected. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -20,8 +20,8 @@
     // Regex to match the formatted phone number
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}$/;
 
-    // Regex to detect valid addresses
-    const addressRegex = /^[A-Za-z0-9\s]{1,64}$/;  // Simple regex to ensure no special characters
+    // Regex to detect invalid special characters
+    const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
     // Function to format the selected text (remove parentheses, replace dashes/periods with spaces)
     function formatPhoneNumber(text) {
@@ -48,8 +48,8 @@
         const wordCount = selectedText.trim().split(/\s+/).length;
         const withinWordLimit = wordCount <= 8;
 
-        // Ensure no special characters (!@#$%^&*()_+{}|":<>?=[];'\)
-        const noSpecialCharacters = addressRegex.test(selectedText);
+        // Ensure no special characters from the list (!@#$%^&*()_+{}|":<>?=[];'\"~`)
+        const noSpecialCharacters = !specialCharactersRegex.test(selectedText);
 
         return hasCapital && hasNumberWithSpace && withinWordLimit && noSpecialCharacters;
     }
@@ -76,8 +76,8 @@
         // Remove existing button container if present
         removeButtonContainer();
 
-        // Check if Copy should be shown (only if either SMS or Call is true)
-        const showCopyButton = showCopy && (showSMS || showCall);
+        // Check if Copy should be shown (only if either SMS or Call is true, and if address exists)
+        const showCopyButton = showCopy && address;
 
         // If none of the buttons should be shown, return early
         if (!showCopyButton && !showSMS && !showCall && (!showMap || !address)) return;
@@ -98,10 +98,10 @@
         container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Semi-transparent background for the button container
 
         // Conditionally create and append the Copy button
-        if (showCopyButton && phoneNumber) {
+        if (showCopyButton) {
             const copyButton = createButton('Copy', function() {
-                navigator.clipboard.writeText(phoneNumber).then(() => {
-                    alert('Phone number copied: ' + phoneNumber); // Confirmation alert
+                navigator.clipboard.writeText(address).then(() => {
+                    alert('Address copied: ' + address); // Confirmation alert
                 }).catch(err => {
                     alert('Failed to copy text: ', err);
                 });
