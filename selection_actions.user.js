@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
-// @version      2.7
-// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
+// @version      2.8
+// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with the page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -82,13 +82,15 @@
         container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
         container.style.maxWidth = '100%'; // Ensure it fits within the screen width
         container.style.flexWrap = 'wrap'; // Ensure buttons wrap if there are too many
-        container.style.transform = 'scale(1)'; // Prevent zooming effect on buttons
+        container.style.transform = 'scale(1)'; // Prevent zooming effect
         container.style.userSelect = 'none'; // Prevent user selection of the buttons
-        container.style.pointerEvents = 'none'; // Prevent interaction when zooming
+        container.style.pointerEvents = 'none'; // Prevent zoom interaction
+        container.style.touchAction = 'none'; // Prevent pinch-to-zoom for this container only
 
-        // Disable interaction for zoom and pointer events
+        // Inner container with interaction enabled
         const innerContainer = document.createElement('div');
-        innerContainer.style.pointerEvents = 'all'; // Enable interaction inside the container
+        innerContainer.style.pointerEvents = 'all'; // Enable interaction within the buttons
+        innerContainer.style.transform = 'scale(1)'; // Prevent scaling on zoom
 
         if (showCopyButton) {
             const copyButton = createButton('Copy', () => {
