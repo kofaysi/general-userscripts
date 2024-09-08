@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
-// @version      2.3
-// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width and remain responsive. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
+// @version      2.5
+// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -21,7 +21,7 @@
     // Regular expressions
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}$/;
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
-    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?[\d\s]{7,8}/i;
+    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?(?:\d\s*){7,8}/i;
 
     // Utility functions
     const formatIdentity = text => text.replace(/\D/g, '').padStart(8, '0');
@@ -82,6 +82,8 @@
         container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
         container.style.maxWidth = '100%'; // Ensure it fits within the screen width
         container.style.flexWrap = 'wrap'; // Ensure buttons wrap if there are too many
+        container.style.transform = 'scale(1)'; // Prevent zooming effect
+        container.style.userSelect = 'none'; // Prevent user selection of the buttons
 
         if (showCopyButton) {
             const copyButton = createButton('Copy', () => {
