@@ -21,7 +21,7 @@
     // Regular expressions
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}$/;
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
-    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?(?:\d\s*){7,8}/i;
+    const identityRegex = /^(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?(?:\d\s*){7,8}$/i;
 
     // Utility functions
     const formatIdentity = text => text.replace(/\D/g, '').padStart(8, '0');
@@ -36,7 +36,7 @@
         const hasCapital = /[A-Z]/.test(selectedText);
         const hasNumberWithSpace = /\s\d/.test(selectedText);
         const wordCount = selectedText.trim().split(/\s+/).length;
-        const withinWordLimit = wordCount <= 8;
+        const withinWordLimit = wordCount <= 12;
         const noSpecialCharacters = !specialCharactersRegex.test(selectedText);
         return hasCapital && hasNumberWithSpace && withinWordLimit && noSpecialCharacters;
     }
