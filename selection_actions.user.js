@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
-// @version      2.5
+// @version      2.6
 // @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -36,7 +36,7 @@
         const hasCapital = /[A-Z]/.test(selectedText);
         const hasNumberWithSpace = /\s\d/.test(selectedText);
         const wordCount = selectedText.trim().split(/\s+/).length;
-        const withinWordLimit = wordCount <= 12;
+        const withinWordLimit = wordCount <= 12; // Increased limit to 12 words
         const noSpecialCharacters = !specialCharactersRegex.test(selectedText);
         return hasCapital && hasNumberWithSpace && withinWordLimit && noSpecialCharacters;
     }
@@ -84,6 +84,7 @@
         container.style.flexWrap = 'wrap'; // Ensure buttons wrap if there are too many
         container.style.transform = 'scale(1)'; // Prevent zooming effect
         container.style.userSelect = 'none'; // Prevent user selection of the buttons
+        container.style.touchAction = 'none'; // Disable pinch-to-zoom
 
         if (showCopyButton) {
             const copyButton = createButton('Copy', () => {
@@ -153,4 +154,10 @@
         const clipboardText = (event.clipboardData || window.clipboardData).getData('text').trim();
         handleTextSelection(clipboardText);
     });
+
+    // Prevent zooming of buttons using meta tag
+    const metaTag = document.createElement('meta');
+    metaTag.name = 'viewport';
+    metaTag.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+    document.getElementsByTagName('head')[0].appendChild(metaTag);
 })();
