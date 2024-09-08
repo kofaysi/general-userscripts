@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
-// @version      2.6
+// @version      2.7
 // @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -82,9 +82,13 @@
         container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
         container.style.maxWidth = '100%'; // Ensure it fits within the screen width
         container.style.flexWrap = 'wrap'; // Ensure buttons wrap if there are too many
-        container.style.transform = 'scale(1)'; // Prevent zooming effect
+        container.style.transform = 'scale(1)'; // Prevent zooming effect on buttons
         container.style.userSelect = 'none'; // Prevent user selection of the buttons
-        container.style.touchAction = 'none'; // Disable pinch-to-zoom
+        container.style.pointerEvents = 'none'; // Prevent interaction when zooming
+
+        // Disable interaction for zoom and pointer events
+        const innerContainer = document.createElement('div');
+        innerContainer.style.pointerEvents = 'all'; // Enable interaction inside the container
 
         if (showCopyButton) {
             const copyButton = createButton('Copy', () => {
@@ -93,7 +97,7 @@
                     alert(`${phoneNumber ? 'Phone number' : address ? 'Address' : 'Identity number'} copied: ${textToCopy}`);
                 }).catch(err => alert('Failed to copy text: ' + err));
             });
-            container.appendChild(copyButton);
+            innerContainer.appendChild(copyButton);
         }
 
         if (showIdentityButtons) {
@@ -102,14 +106,14 @@
                 alert(`Opening URL: ${url}`);
                 window.open(url, '_blank');
             });
-            container.appendChild(openURLButton);
+            innerContainer.appendChild(openURLButton);
         } else {
             if (showSMS && phoneNumber) {
                 const smsButton = createButton('SMS', () => {
                     alert('Opening SMS to: ' + phoneNumber);
                     window.location.href = `sms:${phoneNumber.replace(/\s/g, '')}`;
                 });
-                container.appendChild(smsButton);
+                innerContainer.appendChild(smsButton);
             }
 
             if (showCall && phoneNumber) {
@@ -117,7 +121,7 @@
                     alert('Initiating call to: ' + phoneNumber);
                     window.location.href = `tel:${phoneNumber.replace(/\s/g, '')}`;
                 });
-                container.appendChild(callButton);
+                innerContainer.appendChild(callButton);
             }
         }
 
@@ -126,9 +130,10 @@
                 alert('Opening Maps with: ' + address);
                 window.location.href = `geo:0,0?q=${encodeURIComponent(address)}`;
             });
-            container.appendChild(mapButton);
+            innerContainer.appendChild(mapButton);
         }
 
+        container.appendChild(innerContainer);
         document.body.appendChild(container);
     }
 
@@ -154,10 +159,4 @@
         const clipboardText = (event.clipboardData || window.clipboardData).getData('text').trim();
         handleTextSelection(clipboardText);
     });
-
-    // Prevent zooming of buttons using meta tag
-    const metaTag = document.createElement('meta');
-    metaTag.name = 'viewport';
-    metaTag.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-    document.getElementsByTagName('head')[0].appendChild(metaTag);
 })();
