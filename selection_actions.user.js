@@ -2,7 +2,7 @@
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
 // @namespace    https://github.com/kofaysi/
 // @version      2.3
-// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons aligned horizontally at the bottom of the screen. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
+// @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width and remain responsive. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -21,7 +21,7 @@
     // Regular expressions
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}$/;
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
-    const identityRegex = /(IČ|IČO|ID|DIČ)\:?\s?(CZ)?[\d\s]{7,8}/i;
+    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?[\d\s]{7,8}/i;
 
     // Utility functions
     const formatIdentity = text => text.replace(/\D/g, '').padStart(8, '0');
@@ -61,7 +61,7 @@
     // Create and display buttons
     function createButtonContainer(phoneNumber, address = null, identityNumber = null) {
         removeButtonContainer();
-        
+
         const showCopyButton = showCopy && (showSMS || showCall || address || identityNumber);
         const showIdentityButtons = showOpenIdentityURL && identityNumber;
 
@@ -77,9 +77,11 @@
         container.style.display = 'flex';
         container.style.justifyContent = 'center';
         container.style.padding = '0 20px';
-        container.style.width = '100%';
-        container.style.boxSizing = 'border-box';
+        container.style.width = '100vw'; // Full viewport width
+        container.style.boxSizing = 'border-box'; // Ensure padding is counted within the width
         container.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        container.style.maxWidth = '100%'; // Ensure it fits within the screen width
+        container.style.flexWrap = 'wrap'; // Ensure buttons wrap if there are too many
 
         if (showCopyButton) {
             const copyButton = createButton('Copy', () => {
