@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible Button with Zoom Info
+// @name         Always Visible Button with Live Zoom Info
 // @namespace    http://tampermonkey.net/
-// @version      1.6
-// @description  Button stays fixed at the bottom of the screen and shows zoom level, screen width, screen height, button size, and font size.
+// @version      1.7
+// @description  Button stays fixed at the bottom of the screen and shows live zoom level, screen width, screen height, button size, and font size.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -24,7 +24,7 @@
 
     // Create the button
     const button = document.createElement('button');
-    button.textContent = 'Touch Me';
+    button.textContent = 'Loading...';
     button.style.width = '80vw'; // 80% of viewport width
     button.style.height = '50px';
     button.style.fontSize = '16px';
@@ -51,6 +51,7 @@
         const fontSize = window.getComputedStyle(button).fontSize;
         const zoomLevel = getZoomLevel();
 
+        // Update the button text
         button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth}x${screenHeight}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
     };
 
@@ -58,18 +59,21 @@
     const adjustButtonSizeAndPosition = () => {
         // Get the viewport width and height
         const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
 
-        // Adjust the container's width and position based on the current viewport size
+        // Adjust the container's width
         container.style.width = viewportWidth + 'px';
-        container.style.height = '50px'; // Fixed height for the button container
 
         // Adjust the button size based on the viewport
         button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
 
-        // Update the button with the latest information
+        // Update the button information
         updateButtonInfo();
     };
+
+    // Call the adjust and update functions periodically (e.g., every 100ms)
+    setInterval(() => {
+        adjustButtonSizeAndPosition();
+    }, 100);
 
     // Add touch event listeners to change the color of the button
     button.addEventListener('touchstart', () => {
@@ -83,9 +87,6 @@
     // Append the button to the container and the container to the body
     container.appendChild(button);
     document.body.appendChild(container);
-
-    // Adjust button size and position when the window is resized or zoomed
-    window.addEventListener('resize', adjustButtonSizeAndPosition);
 
     // Initial call to set the button size and position correctly
     adjustButtonSizeAndPosition();
