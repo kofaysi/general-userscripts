@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible Button with Pinch Zoom Awareness
+// @name         Centered Button with Viewport Info
 // @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  Button stays fixed at the bottom of the visual viewport, updates dynamically during zoom or pinch, and remains inside the visible area at all times.
+// @version      2.1
+// @description  Button stays centered in the viewport and shows real-time viewport information using Visual Viewport API.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -14,12 +14,11 @@
     // Create the container
     const container = document.createElement('div');
     container.style.position = 'absolute'; // Use absolute positioning relative to the visual viewport
-    container.style.left = '0'; 
-    container.style.bottom = '0'; 
     container.style.display = 'flex';
     container.style.justifyContent = 'center';
-    container.style.pointerEvents = 'none';
-    container.style.zIndex = '9999'; 
+    container.style.alignItems = 'center';
+    container.style.pointerEvents = 'none'; // Prevent interaction blocking
+    container.style.zIndex = '9999'; // Ensure the button stays on top
 
     // Create the button
     const button = document.createElement('button');
@@ -44,20 +43,18 @@
         return 'N/A';
     };
 
-    // Function to update the button's text with key information
+    // Function to update the button's text with key viewport information
     const updateButtonInfo = () => {
-        const screenWidth = window.visualViewport.width;
-        const screenHeight = window.visualViewport.height;
-        const buttonWidth = button.offsetWidth;
-        const buttonHeight = button.offsetHeight;
-        const fontSize = window.getComputedStyle(button).fontSize;
-        const zoomLevel = getZoomLevel();
+        const viewportWidth = window.visualViewport.width;
+        const viewportHeight = window.visualViewport.height;
+        const viewportTop = window.visualViewport.pageTop;
+        const viewportLeft = window.visualViewport.pageLeft;
 
-        // Update the button text
-        button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth.toFixed(2)}x${screenHeight.toFixed(2)}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
+        // Update the button text with the viewport values
+        button.textContent = `Viewport Width: ${viewportWidth.toFixed(2)}px, Height: ${viewportHeight.toFixed(2)}px, Top: ${viewportTop.toFixed(2)}px, Left: ${viewportLeft.toFixed(2)}px`;
     };
 
-    // Function to keep the button inside the visual viewport
+    // Function to keep the button centered in the visual viewport
     const adjustButtonPosition = () => {
         // Get visual viewport properties
         const viewportWidth = window.visualViewport.width;
@@ -65,13 +62,9 @@
         const viewportLeft = window.visualViewport.pageLeft;
         const viewportTop = window.visualViewport.pageTop;
 
-        // Adjust the container's position to ensure the button is inside the visible viewport
-        container.style.width = viewportWidth + 'px';
-        container.style.left = viewportLeft + 'px';
-        container.style.top = viewportTop + viewportHeight - button.offsetHeight + 'px'; // Stick to the bottom of the visible screen
-
-        // Adjust the button size based on the viewport
-        button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
+        // Center the button in the visible portion of the screen
+        container.style.left = viewportLeft + (viewportWidth / 2) - (button.offsetWidth / 2) + 'px';
+        container.style.top = viewportTop + (viewportHeight / 2) - (button.offsetHeight / 2) + 'px';
 
         updateButtonInfo();
     };
