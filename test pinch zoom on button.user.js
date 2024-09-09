@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible Button with Visual Viewport Info
+// @name         Always Visible Button with Visual Viewport Awareness
 // @namespace    http://tampermonkey.net/
-// @version      1.8
-// @description  Button stays fixed at the bottom of the screen and shows real-time viewport info using Visual Viewport API.
+// @version      1.9
+// @description  Button stays fixed at the bottom of the screen, updates real-time viewport info using Visual Viewport API, and adjusts its position to remain visible within the viewport.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -58,10 +58,21 @@
         button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth.toFixed(2)}x${screenHeight.toFixed(2)}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
     };
 
-    // Function to adjust the size and position of the button dynamically
+    // Function to adjust the size, position, and edge-awareness of the button
     const adjustButtonPosition = () => {
+        // Get visual viewport properties
+        const viewportWidth = window.visualViewport.width;
+        const viewportHeight = window.visualViewport.height;
+        const viewportLeft = window.visualViewport.pageLeft;
+        const viewportTop = window.visualViewport.pageTop;
+
         // Adjust the button size based on the viewport
-        button.style.width = (0.8 * window.visualViewport.width) + 'px'; // 80% of the viewport width
+        button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
+
+        // Ensure the button stays within the visible part of the screen
+        container.style.left = viewportLeft + 'px';
+        container.style.bottom = -(viewportTop) + 'px'; // Stick to the bottom of the visible screen
+
         updateButtonInfo();
     };
 
