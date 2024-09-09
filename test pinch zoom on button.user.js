@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Centered Button with Viewport Info (Fixed)
+// @name         Always Centered Button with Visual Viewport Info
 // @namespace    http://tampermonkey.net/
-// @version      2.2
-// @description  Button stays fixed at the center of the screen and shows real-time viewport information using Visual Viewport API.
+// @version      2.1
+// @description  Button stays centered in the visual viewport and updates dynamically with viewport size, position, and zoom info.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -13,26 +13,26 @@
 
     // Create the container
     const container = document.createElement('div');
-    container.style.position = 'fixed'; // Fixed to the visual viewport
-    container.style.display = 'flex';
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.pointerEvents = 'none'; // Prevent interaction blocking
-    container.style.zIndex = '9999'; // Ensure the button stays on top
+    container.style.position = 'absolute'; // Absolute positioning relative to the visual viewport
+    container.style.display = 'flex'; 
+    container.style.justifyContent = 'center'; // Center horizontally
+    container.style.alignItems = 'center'; // Center vertically
+    container.style.pointerEvents = 'none'; // Ignore interaction for the container itself
+    container.style.zIndex = '9999'; // Ensure it's above other elements
 
     // Create the button
     const button = document.createElement('button');
     button.textContent = 'Loading...';
-    button.style.width = '80vw'; 
+    button.style.width = '80vw'; // 80% of viewport width
     button.style.height = '50px';
     button.style.fontSize = '16px';
     button.style.backgroundColor = '#007bff';
     button.style.color = '#fff';
     button.style.border = 'none';
     button.style.borderRadius = '10px';
-    button.style.pointerEvents = 'auto'; 
-    button.style.touchAction = 'none'; 
-    button.style.transition = 'background-color 0.2s ease'; 
+    button.style.pointerEvents = 'auto'; // Allow interaction with the button
+    button.style.touchAction = 'none'; // Prevent zooming or gestures on the button itself
+    button.style.transition = 'background-color 0.2s ease'; // Smooth color change
     button.style.transformOrigin = 'center';
 
     // Function to calculate the zoom level using Visual Viewport API
@@ -40,30 +40,39 @@
         if (window.visualViewport) {
             return (window.visualViewport.scale).toFixed(2);
         }
-        return 'N/A';
+        return 'N/A'; // Fallback if Visual Viewport API is unsupported
     };
 
-    // Function to update the button's text with key viewport information
+    // Function to update the button's text with key information
     const updateButtonInfo = () => {
         const viewportWidth = window.visualViewport.width;
         const viewportHeight = window.visualViewport.height;
-        const viewportTop = window.visualViewport.pageTop;
         const viewportLeft = window.visualViewport.pageLeft;
+        const viewportTop = window.visualViewport.pageTop;
+        const zoomLevel = getZoomLevel();
 
-        // Update the button text with the viewport values
-        button.textContent = `Viewport Width: ${viewportWidth.toFixed(2)}px, Height: ${viewportHeight.toFixed(2)}px, Top: ${viewportTop.toFixed(2)}px, Left: ${viewportLeft.toFixed(2)}px`;
+        // Update the button text to show viewport dimensions, zoom, and offsets
+        button.textContent = `Zoom: ${zoomLevel}, Viewport: ${viewportWidth.toFixed(2)}x${viewportHeight.toFixed(2)}, Top: ${viewportTop.toFixed(2)}, Left: ${viewportLeft.toFixed(2)}`;
     };
 
-    // Function to keep the button centered in the visual viewport
+    // Function to center the button in the visual viewport
     const adjustButtonPosition = () => {
         // Get visual viewport properties
         const viewportWidth = window.visualViewport.width;
         const viewportHeight = window.visualViewport.height;
+        const viewportLeft = window.visualViewport.pageLeft;
+        const viewportTop = window.visualViewport.pageTop;
 
-        // Center the button in the visible portion of the screen
-        container.style.left = (viewportWidth / 2) - (button.offsetWidth / 2) + 'px';
-        container.style.top = (viewportHeight / 2) - (button.offsetHeight / 2) + 'px';
+        // Center the container within the viewport
+        container.style.width = viewportWidth + 'px';
+        container.style.height = viewportHeight + 'px';
+        container.style.left = viewportLeft + 'px';
+        container.style.top = viewportTop + 'px';
 
+        // Adjust the button size based on the viewport
+        button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
+
+        // Update the button information with viewport properties
         updateButtonInfo();
     };
 
@@ -79,11 +88,11 @@
 
     // Add touch event listeners to change the color of the button
     button.addEventListener('touchstart', () => {
-        button.style.backgroundColor = '#28a745'; 
+        button.style.backgroundColor = '#28a745'; // Change color on touch
     });
 
     button.addEventListener('touchend', () => {
-        button.style.backgroundColor = '#007bff'; 
+        button.style.backgroundColor = '#007bff'; // Change back to original color
     });
 
     // Append the button to the container and the container to the body
