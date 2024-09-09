@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible Button with Live Zoom Info
+// @name         Always Visible Button with Visual Viewport Info
 // @namespace    http://tampermonkey.net/
-// @version      1.7
-// @description  Button stays fixed at the bottom of the screen and shows live zoom level, screen width, screen height, button size, and font size.
+// @version      1.8
+// @description  Button stays fixed at the bottom of the screen and shows real-time viewport info using Visual Viewport API.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -37,43 +37,43 @@
     button.style.transition = 'background-color 0.2s ease'; // Smooth color change
     button.style.transformOrigin = 'center';
 
-    // Function to calculate the zoom level (current viewport width vs. initial viewport width)
+    // Function to calculate the zoom level using Visual Viewport API
     const getZoomLevel = () => {
-        return (window.outerWidth / window.innerWidth).toFixed(2);
+        if (window.visualViewport) {
+            return (window.visualViewport.scale).toFixed(2);
+        }
+        return 'N/A'; // Fallback if the Visual Viewport API is unsupported
     };
 
     // Function to update the button's text with key information
     const updateButtonInfo = () => {
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
+        const screenWidth = window.visualViewport.width;
+        const screenHeight = window.visualViewport.height;
         const buttonWidth = button.offsetWidth;
         const buttonHeight = button.offsetHeight;
         const fontSize = window.getComputedStyle(button).fontSize;
         const zoomLevel = getZoomLevel();
 
         // Update the button text
-        button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth}x${screenHeight}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
+        button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth.toFixed(2)}x${screenHeight.toFixed(2)}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
     };
 
     // Function to adjust the size and position of the button dynamically
-    const adjustButtonSizeAndPosition = () => {
-        // Get the viewport width and height
-        const viewportWidth = window.innerWidth;
-
-        // Adjust the container's width
-        container.style.width = viewportWidth + 'px';
-
+    const adjustButtonPosition = () => {
         // Adjust the button size based on the viewport
-        button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
-
-        // Update the button information
+        button.style.width = (0.8 * window.visualViewport.width) + 'px'; // 80% of the viewport width
         updateButtonInfo();
     };
 
-    // Call the adjust and update functions periodically (e.g., every 100ms)
-    setInterval(() => {
-        adjustButtonSizeAndPosition();
-    }, 100);
+    // Event listeners for resizing and scrolling using Visual Viewport API
+    const setupVisualViewportListeners = () => {
+        if (window.visualViewport) {
+            window.visualViewport.onresize = adjustButtonPosition;
+            window.visualViewport.onscroll = adjustButtonPosition;
+        } else {
+            console.error('Visual Viewport API is not supported on this browser.');
+        }
+    };
 
     // Add touch event listeners to change the color of the button
     button.addEventListener('touchstart', () => {
@@ -89,5 +89,7 @@
     document.body.appendChild(container);
 
     // Initial call to set the button size and position correctly
-    adjustButtonSizeAndPosition();
+    adjustButtonPosition();
+    setupVisualViewportListeners();
+
 })();
