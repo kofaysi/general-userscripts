@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible, Non-Zooming Mobile Button with Dynamic Resizing
+// @name         Always Visible Button with Zoom Info
 // @namespace    http://tampermonkey.net/
-// @version      1.5
-// @description  Creates a button that stays fixed at the bottom of the screen and dynamically adjusts its size/position when the page is zoomed.
+// @version      1.6
+// @description  Button stays fixed at the bottom of the screen and shows zoom level, screen width, screen height, button size, and font size.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -13,7 +13,7 @@
 
     // Create the container
     const container = document.createElement('div');
-    container.style.position = 'fixed'; // Fixed to the viewport
+    container.style.position = 'fixed'; // Fixes the container to the viewport
     container.style.left = '0'; // Align left
     container.style.bottom = '0'; // Align at the bottom
     container.style.width = '100vw'; // Full viewport width
@@ -37,18 +37,22 @@
     button.style.transition = 'background-color 0.2s ease'; // Smooth color change
     button.style.transformOrigin = 'center';
 
-    // Add touch event listeners
-    button.addEventListener('touchstart', () => {
-        button.style.backgroundColor = '#28a745'; // Change color on touch
-    });
+    // Function to calculate the zoom level (current viewport width vs. initial viewport width)
+    const getZoomLevel = () => {
+        return (window.outerWidth / window.innerWidth).toFixed(2);
+    };
 
-    button.addEventListener('touchend', () => {
-        button.style.backgroundColor = '#007bff'; // Revert back after touch ends
-    });
+    // Function to update the button's text with key information
+    const updateButtonInfo = () => {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const buttonWidth = button.offsetWidth;
+        const buttonHeight = button.offsetHeight;
+        const fontSize = window.getComputedStyle(button).fontSize;
+        const zoomLevel = getZoomLevel();
 
-    // Append the button to the container and the container to the body
-    container.appendChild(button);
-    document.body.appendChild(container);
+        button.textContent = `Zoom: ${zoomLevel}, Screen: ${screenWidth}x${screenHeight}, Button: ${buttonWidth}x${buttonHeight}, Font: ${fontSize}`;
+    };
 
     // Function to adjust the size and position of the button dynamically
     const adjustButtonSizeAndPosition = () => {
@@ -62,9 +66,25 @@
 
         // Adjust the button size based on the viewport
         button.style.width = (0.8 * viewportWidth) + 'px'; // 80% of the viewport width
+
+        // Update the button with the latest information
+        updateButtonInfo();
     };
 
-    // Adjust button size and position when the window is resized (e.g., zoom in/out)
+    // Add touch event listeners to change the color of the button
+    button.addEventListener('touchstart', () => {
+        button.style.backgroundColor = '#28a745'; // Change color on touch
+    });
+
+    button.addEventListener('touchend', () => {
+        button.style.backgroundColor = '#007bff'; // Change back to original color
+    });
+
+    // Append the button to the container and the container to the body
+    container.appendChild(button);
+    document.body.appendChild(container);
+
+    // Adjust button size and position when the window is resized or zoomed
     window.addEventListener('resize', adjustButtonSizeAndPosition);
 
     // Initial call to set the button size and position correctly
