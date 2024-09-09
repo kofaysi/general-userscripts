@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Mobile Button with Touch Color Change (Fixed Zoom)
+// @name         Always Visible Mobile Button
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Creates a container with a button that changes color on touch and retains size during pinch zoom
+// @version      1.2
+// @description  Creates a button that stays fixed at the bottom of the screen regardless of page zoom or scroll
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -13,27 +13,28 @@
 
     // Create the container
     const container = document.createElement('div');
-    container.style.position = 'fixed';
-    container.style.bottom = '10px';
+    container.style.position = 'fixed'; // Fixes the container to the viewport
+    container.style.bottom = '10px'; // 10px from the bottom of the viewport
     container.style.left = '0';
-    container.style.width = '100vw'; // Viewport width, ensures it retains the screen width regardless of zoom
+    container.style.width = '100vw'; // 100% of the viewport width
     container.style.display = 'flex';
     container.style.justifyContent = 'center';
-    container.style.pointerEvents = 'none'; // Allows interaction with underlying elements
-    container.style.zIndex = '1000';
+    container.style.pointerEvents = 'none'; // Allows interaction with underlying page elements
+    container.style.zIndex = '9999'; // Ensures the button is on top of other elements
 
     // Create the button
     const button = document.createElement('button');
     button.textContent = 'Touch Me';
-    button.style.width = '80vw'; // Viewport width for the button
+    button.style.width = '80vw'; // 80% of the viewport width
     button.style.height = '50px';
     button.style.fontSize = '16px';
     button.style.backgroundColor = '#007bff';
     button.style.color = '#fff';
     button.style.border = 'none';
     button.style.borderRadius = '10px';
-    button.style.pointerEvents = 'auto'; // Allow interaction with the button
-    button.style.transformOrigin = 'center'; // Prevent zoom scaling from distorting the button
+    button.style.pointerEvents = 'auto'; // Allows interaction with the button
+    button.style.transformOrigin = 'center';
+    button.style.touchAction = 'none'; // Prevents zooming on the button
 
     // Add touch event listeners
     button.addEventListener('touchstart', () => {
@@ -48,16 +49,10 @@
     container.appendChild(button);
     document.body.appendChild(container);
 
-    // Prevent zooming/scaling for the container and button
-    const preventZoomStyle = document.createElement('style');
-    preventZoomStyle.innerHTML = `
-      @media screen and (min-width: 0px) {
-        div, button {
-          touch-action: manipulation; /* Prevents zooming */
-          transform: none !important; /* Ensures elements keep their size */
-          width: 100vw; /* Retain full viewport width */
-        }
-      }
-    `;
-    document.head.appendChild(preventZoomStyle);
+    // Optional: Disable zoom on the page to prevent any pinch-zoom interaction
+    const meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+    document.head.appendChild(meta);
+
 })();
