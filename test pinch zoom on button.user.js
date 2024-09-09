@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Centered Button with Viewport Info
+// @name         Centered Button with Viewport Info (Fixed)
 // @namespace    http://tampermonkey.net/
-// @version      2.1
-// @description  Button stays centered in the viewport and shows real-time viewport information using Visual Viewport API.
+// @version      2.2
+// @description  Button stays fixed at the center of the screen and shows real-time viewport information using Visual Viewport API.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -13,7 +13,7 @@
 
     // Create the container
     const container = document.createElement('div');
-    container.style.position = 'absolute'; // Use absolute positioning relative to the visual viewport
+    container.style.position = 'fixed'; // Fixed to the visual viewport
     container.style.display = 'flex';
     container.style.justifyContent = 'center';
     container.style.alignItems = 'center';
@@ -59,12 +59,10 @@
         // Get visual viewport properties
         const viewportWidth = window.visualViewport.width;
         const viewportHeight = window.visualViewport.height;
-        const viewportLeft = window.visualViewport.pageLeft;
-        const viewportTop = window.visualViewport.pageTop;
 
         // Center the button in the visible portion of the screen
-        container.style.left = viewportLeft + (viewportWidth / 2) - (button.offsetWidth / 2) + 'px';
-        container.style.top = viewportTop + (viewportHeight / 2) - (button.offsetHeight / 2) + 'px';
+        container.style.left = (viewportWidth / 2) - (button.offsetWidth / 2) + 'px';
+        container.style.top = (viewportHeight / 2) - (button.offsetHeight / 2) + 'px';
 
         updateButtonInfo();
     };
