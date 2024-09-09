@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Mobile Button with Touch Color Change
+// @name         Mobile Button with Touch Color Change (Fixed Zoom)
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Creates a container with a button that changes color on touch and retains screen width
+// @version      1.1
+// @description  Creates a container with a button that changes color on touch and retains size during pinch zoom
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -16,16 +16,16 @@
     container.style.position = 'fixed';
     container.style.bottom = '10px';
     container.style.left = '0';
-    container.style.width = '100%';
+    container.style.width = '100vw'; // Viewport width, ensures it retains the screen width regardless of zoom
     container.style.display = 'flex';
     container.style.justifyContent = 'center';
-    container.style.pointerEvents = 'none'; // Allow interaction with underlying elements
+    container.style.pointerEvents = 'none'; // Allows interaction with underlying elements
     container.style.zIndex = '1000';
 
     // Create the button
     const button = document.createElement('button');
     button.textContent = 'Touch Me';
-    button.style.width = '80%';
+    button.style.width = '80vw'; // Viewport width for the button
     button.style.height = '50px';
     button.style.fontSize = '16px';
     button.style.backgroundColor = '#007bff';
@@ -33,6 +33,7 @@
     button.style.border = 'none';
     button.style.borderRadius = '10px';
     button.style.pointerEvents = 'auto'; // Allow interaction with the button
+    button.style.transformOrigin = 'center'; // Prevent zoom scaling from distorting the button
 
     // Add touch event listeners
     button.addEventListener('touchstart', () => {
@@ -47,13 +48,14 @@
     container.appendChild(button);
     document.body.appendChild(container);
 
-    // Prevent zoom and resizing for the container
+    // Prevent zooming/scaling for the container and button
     const preventZoomStyle = document.createElement('style');
     preventZoomStyle.innerHTML = `
       @media screen and (min-width: 0px) {
         div, button {
           touch-action: manipulation; /* Prevents zooming */
-          transform: none !important; /* Ensures the elements keep their size */
+          transform: none !important; /* Ensures elements keep their size */
+          width: 100vw; /* Retain full viewport width */
         }
       }
     `;
