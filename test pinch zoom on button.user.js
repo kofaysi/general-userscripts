@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Always Visible Mobile Button
+// @name         Always Visible, Non-Zooming Mobile Button
 // @namespace    http://tampermonkey.net/
-// @version      1.2
-// @description  Creates a button that stays fixed at the bottom of the screen regardless of page zoom or scroll
+// @version      1.3
+// @description  Creates a button that stays fixed at the bottom of the screen and does not zoom when the page is zoomed.
 // @author       Your Name
 // @match        *://*/*
 // @grant        none
@@ -33,8 +33,9 @@
     button.style.border = 'none';
     button.style.borderRadius = '10px';
     button.style.pointerEvents = 'auto'; // Allows interaction with the button
-    button.style.transformOrigin = 'center';
     button.style.touchAction = 'none'; // Prevents zooming on the button
+    button.style.transformOrigin = 'center';
+    button.style.transition = 'background-color 0.2s ease'; // Smooth color change
 
     // Add touch event listeners
     button.addEventListener('touchstart', () => {
@@ -49,10 +50,29 @@
     container.appendChild(button);
     document.body.appendChild(container);
 
-    // Optional: Disable zoom on the page to prevent any pinch-zoom interaction
+    // Prevent the button from scaling with the page zoom
+    const preventZoomStyle = document.createElement('style');
+    preventZoomStyle.innerHTML = `
+      button {
+        position: fixed;
+        bottom: 10px;
+        width: 80vw;
+        height: 50px;
+        transform: scale(1) !important; /* Prevents button from scaling with page zoom */
+        transform-origin: center !important;
+        touch-action: manipulation;
+        pointer-events: auto;
+        z-index: 9999;
+      }
+      html, body {
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(preventZoomStyle);
+
+    // Optional: Disable zoom on the entire page to prevent zoom interaction
     const meta = document.createElement('meta');
     meta.name = 'viewport';
     meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
     document.head.appendChild(meta);
-
 })();
