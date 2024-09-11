@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Phone Number, Address, and Identity Linkifier
 // @namespace    https://github.com/kofaysi/
-// @version      0.1
-// @description  Parses the page content for phone numbers, addresses, and identity numbers, and linkifies them if they are not already in a link.
+// @version      0.2
+// @description  Parses the page content for addresses, identity numbers, and phone numbers, linkifying them hierarchically (addresses first, then identity, then phone numbers) if they are not already in a link.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -14,6 +14,7 @@
     // Regular expressions
     const phoneRegex = /(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}/g;
     const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?(?:\d\s*){7,8}/gi;
+    const addressRegex = /\b([A-Z][a-zA-Z]+\s+\d[\w\s]*)/g;
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
     // Utility functions
@@ -104,23 +105,23 @@
         return a;
     }
 
-    // Function to process the whole document
+    // Function to process the whole document in a hierarchical manner
     function processDocument() {
         const body = document.body;
 
-        // Linkify phone numbers
-        linkifyText(body, phoneRegex, createPhoneLink);
-
-        // Linkify identity numbers
-        linkifyText(body, identityRegex, createIdentityLink);
-
-        // Linkify valid addresses
-        linkifyText(body, /\b([A-Z][a-zA-Z]+\s+\d[\w\s]*)/g, (match) => {
+        // Linkify addresses first
+        linkifyText(body, addressRegex, (match) => {
             if (isValidAddress(match)) {
                 return createMapLink(match);
             }
             return document.createTextNode(match);
         });
+
+        // Linkify identity numbers next
+        linkifyText(body, identityRegex, createIdentityLink);
+
+        // Finally, linkify phone numbers
+        linkifyText(body, phoneRegex, createPhoneLink);
     }
 
     // Run the linkify process when the DOM is fully loaded
