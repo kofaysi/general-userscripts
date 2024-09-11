@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Phone Number, Address, and Identity Linkifier
+// @name         linkify_phones_addresses_IDs
 // @namespace    https://github.com/kofaysi/
-// @version      0.2
-// @description  Parses the page content for addresses, identity numbers, and phone numbers, linkifying them hierarchically (addresses first, then identity, then phone numbers) if they are not already in a link.
+// @version      0.3
+// @description  Parses the page content for addresses, identity numbers, and phone numbers, linkifying them hierarchically (addresses first, then identity, then phone numbers) if they are not already in a link. Address regex limits to 64 characters, identity regex does not consume pretexts.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -13,8 +13,13 @@
 
     // Regular expressions
     const phoneRegex = /(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}/g;
-    const identityRegex = /(IČ|IČO|ID|DIČ)?\:?\s?(CZ)?(?:\d\s*){7,8}/gi;
-    const addressRegex = /\b([A-Z][a-zA-Z]+\s+\d[\w\s]*)/g;
+    
+    // Adjust the identity regex to avoid consuming the pretexts (IČ, IČO, etc.)
+    const identityRegex = /(?:IČ|IČO|ID|DIČ)\s?:?\s?(CZ)?(?:\d\s*){7,8}/gi;
+
+    // The address regex now extends up to 64 characters
+    const addressRegex = /\b([A-Z][a-zA-Z]+\s+\d[\w\s]{0,64})/g;
+    
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
     // Utility functions
