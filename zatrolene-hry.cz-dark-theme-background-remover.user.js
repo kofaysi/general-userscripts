@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Zatrolene Hry: Remove Background Image
+// @name         Zatrolene Hry: Remove Background Image in Dark Mode
 // @namespace    https://github.com/kofaysi/
-// @version      1.7
-// @description  Remove the background image from body and footer elements on Zatrolene Hry to prevent white blink and allow user theme choice
+// @version      1.8
+// @description  Remove the background image from body and footer elements on Zatrolene Hry, but only when dark mode is enabled in the browser
 // @author       https://github.com/kofaysi/
 // @match        *://www.zatrolene-hry.cz/*
 // @grant        none
@@ -25,15 +25,32 @@
         }
     }
 
-    // Ensure the function runs as soon as possible
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', removeBackgroundImages);
-    } else {
-        removeBackgroundImages();
+    // Check if dark mode is enabled in the user's browser
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Apply background removal if dark mode is enabled
+    function checkDarkModeAndApply() {
+        if (darkModeMediaQuery.matches) {
+            removeBackgroundImages();
+        }
     }
 
+    // Run the check once the page is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkDarkModeAndApply);
+    } else {
+        checkDarkModeAndApply();
+    }
+
+    // Listen for changes in the user's dark mode preference
+    darkModeMediaQuery.addListener(checkDarkModeAndApply);
+
     // Additional fallback for when background changes dynamically after load
-    new MutationObserver(removeBackgroundImages).observe(document.body, {
+    new MutationObserver(() => {
+        if (darkModeMediaQuery.matches) {
+            removeBackgroundImages();
+        }
+    }).observe(document.body, {
         attributes: true, // Listen for attribute changes
         attributeFilter: ['style'] // Specifically monitor style changes
     });
