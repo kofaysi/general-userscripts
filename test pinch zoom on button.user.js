@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Always Centered Button with Visual Viewport Info
-// @namespace    http://tampermonkey.net/
-// @version      2.1
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/test%20pinch%20zoom%20on%20button.user.js
+// @version      2.2
 // @description  Button stays centered in the visual viewport and updates dynamically with viewport size, position, and zoom info.
-// @author       Your Name
+// @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
