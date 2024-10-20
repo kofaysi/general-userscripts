@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Pop-up Blocker for SvetSerialu.io
-// @namespace    http://tampermonkey.net/
-// @version      1.3
+// @name         Pop-up Blocker @svetserialu.io
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/pop-up-blocker-for-svetserialu-io.user.js
+// @version      1.4
 // @description  Blocks pop-up windows on svetserialu.io
-// @author       ChatGPT
+// @author       https://github.com/kofaysi/
 // @match        https://svetserialu.io/*
 // @grant        none
 // ==/UserScript==
