@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         linkify_phones_addresses_IDs
+// @name         Linkify Phones Addresses IDs
 // @namespace    https://github.com/kofaysi/general-userscripts/blob/main/linkify_phones_adresses_IDs.user.js
-// @version      0.4
+// @version      0.5
 // @description  Parses the page content for addresses, identity numbers, and phone numbers, linkifying them hierarchically (addresses first, then identity, then phone numbers) if they are not already in a link. Address regex limits to 64 characters, identity regex does not consume pretexts.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
