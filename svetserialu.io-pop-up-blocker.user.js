@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pop-up Blocker @svetserialu.io
-// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/pop-up-blocker-for-svetserialu-io.user.js
-// @version      1.4
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/svetserialu.io-pop-up-blocker.user.js.js
+// @version      1.5
 // @description  Blocks pop-up windows on svetserialu.io
 // @author       https://github.com/kofaysi/
 // @match        https://svetserialu.io/*
