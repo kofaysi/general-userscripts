@@ -12,7 +12,7 @@
     'use strict';
 
     // Regular expressions
-    const phoneRegex = /(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){1,5}/g;
+    const phoneRegex = /(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){2,5}/g;
     
     // Adjust the identity regex to avoid consuming the pretexts (IČ, IČO, etc.)
     const identityRegex = /(?:IČ|IČO|ID|DIČ)\s?:?\s?(CZ)?(?:\d\s*){7,8}/gi;
