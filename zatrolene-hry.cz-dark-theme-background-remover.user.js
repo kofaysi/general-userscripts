@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Zatrolene Hry: Remove Background Image in Dark Mode
+// @name         Remove Background Image in Dark Mode @zatrolene-hry.cz
 // @namespace    https://github.com/kofaysi/general-userscripts/blob/main/zatrolene-hry.cz-dark-theme-background-remover.user.js
-// @version      1.8
+// @version      1.9
 // @description  Remove the background image from body and footer elements on Zatrolene Hry, but only when dark mode is enabled in the browser
 // @author       https://github.com/kofaysi/
 // @match        *://www.zatrolene-hry.cz/*
