@@ -18,7 +18,7 @@
     const identityRegex = /^(?:IČ|IČO|ID|DIČ)\s?:?\s?(CZ)?(?:\d\s*){7,8}$/gi;
 
     // The address regex now extends up to 64 characters
-    const addressRegex = /^\b([A-Z][a-zA-Z]+\s+\d[\w\s]{0,64})$/g;
+    const addressRegex = /^\b([A-Z][a-zA-Z]+\s+\d[\w\s-–]{0,64})$/g;
     
     const specialCharactersRegex = /[!@#$%^&*()_+{}|":<>?=\[\];'\\~`]/;
 
