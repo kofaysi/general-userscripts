@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Website Blocker
-// @namespace    https://github.com/kofaysi/
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/web-guardian-for-Emma.user.js
 // @version      1.10
 // @description  Block all websites except the whitelisted ones
 // @author       https://github.com/kofaysi/
