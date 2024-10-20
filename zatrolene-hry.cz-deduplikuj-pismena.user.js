@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Replace Duplicate Starting Letters
-// @namespace    https://github.com/kofaysi/
-// @version      0.3
+// @name         Replace Duplicate Starting Letters @zatrolene-hry.cz
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/zatrolene-hry.cz-deduplikuj-pismena.user.js
+// @version      0.4
 // @description  Replace duplicate starting letters of words with single letters in a specific editor
 // @author       https://github.com/kofaysi/
 // @match        https://www.zatrolene-hry.cz/*
