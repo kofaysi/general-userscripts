@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Phone Number Call Button Overlay with Disappearing Button and Identity Detection
-// @namespace    https://github.com/kofaysi/
-// @version      2.8
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/selection_actions.user.js
+// @version      2.9
 // @description  Adds floating buttons for Call, Send SMS, Copy, Map, and opening URLs for identity numbers (IČ, IČO, ID, DIČ). Prioritizes showing the Rejstřík button for identity numbers. Buttons fit screen width, remain responsive, and do not zoom with the page. Mobile touch events supported. Map button opens in the default map application using geo URI. Handles European accents, excludes special characters like !@#$%^&*()_+{}|":<>?=[];'\"~`.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
