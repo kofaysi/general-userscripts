@@ -96,7 +96,7 @@
         const formattedIdentity = formatIdentity(identityNumber);
         const a = document.createElement('a');
         a.href = `https://or.justice.cz/ias/ui/rejstrik-$firma?ico=${formattedIdentity}`;
-        a.textContent = formattedIdentity;
+        a.textContent = identityNumber;
         a.style.color = '#FF5733';
         return a;
     }
