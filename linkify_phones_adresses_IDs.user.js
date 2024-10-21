@@ -86,7 +86,7 @@
         const formattedPhone = formatPhoneNumber(phoneNumber);
         const a = document.createElement('a');
         a.href = `tel:${formattedPhone.replace(/\s/g, '')}`;
-        a.textContent = formattedPhone;
+        a.textContent = phoneNumber;
         a.style.color = '#4CAF50';
         return a;
     }
