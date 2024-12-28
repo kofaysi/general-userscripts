@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Remove Background Image in Dark Mode
 // @namespace    https://github.com/kofaysi/general-userscripts/blob/main/dark-theme-background-remover.user.js
-// @version      2.0
+// @version      2.1
 // @description  Remove the background image from body and footer elements on matched sites, but only when dark mode is enabled in the browser
 // @author       https://github.com/kofaysi/
 // @match        *://www.zatrolene-hry.cz/*
@@ -20,13 +20,13 @@
         bodyElement.style.backgroundImage = 'none';
 
         // Remove the background image from the footer
-        const footerElement = document.querySelector('.footer');
+        const footerElement = document.querySelector('#footerCover');
         if (footerElement) {
             footerElement.style.backgroundImage = 'none';
         }
 
         // Remove the background image from the header
-        const headerElement = document.querySelector('.header');
+        const headerElement = document.querySelector('#header');
         if (headerElement) {
             headerElement.style.backgroundImage = 'none';
         }
