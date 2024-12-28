@@ -1,10 +1,9 @@
 // ==UserScript==
-// @name         Remove Background Image in Dark Mode
+// @name         Remove Background Image in Dark Mode for Pediatrue Mignon
 // @namespace    https://github.com/kofaysi/general-userscripts/blob/main/dark-theme-background-remover.user.js
-// @version      2.1
-// @description  Remove the background image from body and footer elements on matched sites, but only when dark mode is enabled in the browser
+// @version      2.2
+// @description  Remove the background image from body, footer, header, and other elements on matched sites, including inline and computed styles, when dark mode is enabled in the browser.
 // @author       https://github.com/kofaysi/
-// @match        *://www.zatrolene-hry.cz/*
 // @match        *://www.pediatrie-mignon.cz/*
 // @grant        none
 // @run-at       document-start
@@ -13,23 +12,38 @@
 (function() {
     'use strict';
 
-    // Function to remove background images from the body and footer elements
+    // Utility function to remove background styles
+    function clearBackgroundStyles(element) {
+        if (element) {
+            element.style.backgroundImage = 'none';
+            element.style.backgroundColor = 'inherit';
+            element.style.background = 'none';
+        }
+    }
+
+    // Function to remove background images from common elements
     function removeBackgroundImages() {
-        // Remove the background image from the body
-        const bodyElement = document.body;
-        bodyElement.style.backgroundImage = 'none';
+        const elementsToClear = [
+            document.body,
+            document.querySelector('#footerCover'),
+            document.querySelector('#header'),
+            document.querySelector('.header'),
+            document.querySelector('#wrapper'),
+        ];
 
-        // Remove the background image from the footer
-        const footerElement = document.querySelector('#footerCover');
-        if (footerElement) {
-            footerElement.style.backgroundImage = 'none';
-        }
+        elementsToClear.forEach(clearBackgroundStyles);
 
-        // Remove the background image from the header
-        const headerElement = document.querySelector('#header');
-        if (headerElement) {
-            headerElement.style.backgroundImage = 'none';
-        }
+        // Additional cleanup for elements with dynamically applied styles
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach((el) => {
+            const computedStyle = getComputedStyle(el);
+            if (
+                computedStyle.backgroundImage !== 'none' ||
+                computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)'
+            ) {
+                clearBackgroundStyles(el);
+            }
+        });
     }
 
     // Check if dark mode is enabled in the user's browser
@@ -52,13 +66,14 @@
     // Listen for changes in the user's dark mode preference
     darkModeMediaQuery.addListener(checkDarkModeAndApply);
 
-    // Additional fallback for when background changes dynamically after load
+    // Observe dynamic changes to styles
     new MutationObserver(() => {
         if (darkModeMediaQuery.matches) {
             removeBackgroundImages();
         }
     }).observe(document.body, {
-        attributes: true, // Listen for attribute changes
-        attributeFilter: ['style'] // Specifically monitor style changes
+        attributes: true,
+        childList: true,
+        subtree: true,
     });
 })();
