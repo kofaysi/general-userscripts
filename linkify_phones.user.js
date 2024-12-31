@@ -15,8 +15,9 @@
     const phoneRegex = /^(([\+]|00)\d{1,3})?\s?\d{1,3}(\s?\d{2,6}){2,5}$/g;
 
     function formatPhoneNumber(text) {
-        return text.replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim();
-    }
+        // Replace non-breaking spaces (&nbsp;) with regular spaces, and then clean up formatting
+        return text.replace(/&nbsp;/g, ' ').replace(/[().-]/g, ' ').replace(/\s+/g, ' ').trim();
+     }
 
     function createPhoneLink(phoneNumber) {
         const formattedPhone = formatPhoneNumber(phoneNumber);
