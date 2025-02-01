@@ -50,47 +50,39 @@
         const encodedText = encodeURIComponent(text.trim());
         const fullUrl = `${window.location.href}#:~:text=${encodedText}`;
         console.log('Selection URL:', fullUrl);
-        
-        // 1. Floating button at bottom-right
-        const anchor1 = document.createElement('button');
-        anchor1.textContent = '🔗 Copy Selection Link';
-        anchor1.style.position = 'fixed';
-        anchor1.style.right = '20px';
-        anchor1.style.bottom = '20px';
-        anchor1.style.backgroundColor = '#28a745';
-        anchor1.style.color = 'white';
-        anchor1.style.padding = '10px';
-        anchor1.style.border = 'none';
-        anchor1.style.borderRadius = '5px';
-        anchor1.style.cursor = 'pointer';
-        anchor1.style.zIndex = '10000';
-        document.body.appendChild(anchor1);
-        
-        // 2. Append a small notification in-page
-        const anchor2 = document.createElement('div');
-        anchor2.textContent = `🔗 Link copied! ${fullUrl}`;
-        anchor2.style.position = 'fixed';
-        anchor2.style.left = '50%';
-        anchor2.style.top = '50px';
-        anchor2.style.transform = 'translateX(-50%)';
-        anchor2.style.backgroundColor = '#ffcc00';
-        anchor2.style.color = 'black';
-        anchor2.style.padding = '8px';
-        anchor2.style.border = '2px solid black';
-        anchor2.style.borderRadius = '5px';
-        anchor2.style.zIndex = '10000';
-        document.body.appendChild(anchor2);
 
-        // Click event handler
-        anchor1.addEventListener('click', () => {
+        // Create a bottom fixed container
+        const container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.bottom = '0';
+        container.style.width = '100vw';
+        container.style.display = 'flex';
+        container.style.justifyContent = 'center';
+        container.style.zIndex = '9999';
+
+        // Create a large button inside the container
+        const button = document.createElement('button');
+        button.textContent = '🔗 Copy Selection Link';
+        button.style.width = '80vw';
+        button.style.height = '50px';
+        button.style.fontSize = '16px';
+        button.style.backgroundColor = '#007bff';
+        button.style.color = '#fff';
+        button.style.border = 'none';
+        button.style.borderRadius = '10px';
+        button.style.cursor = 'pointer';
+
+        button.addEventListener('click', () => {
             navigator.clipboard.writeText(fullUrl).then(() => {
                 alert(`Copied link: ${fullUrl}`);
             }).catch(err => console.error('Clipboard copy failed:', err));
         });
+
+        container.appendChild(button);
+        document.body.appendChild(container);
         
         setTimeout(() => {
-            anchor1.remove();
-            anchor2.remove();
+            container.remove();
         }, 10000); // Remove after 10 seconds
     }
 
