@@ -1,18 +1,16 @@
 // ==UserScript==
 // @name         Show Anchors on Page & Text Selection Links
 // @namespace    https://github.com/kofaysi/general-userscripts/
-// @version      1.4
-// @description  Display floating link symbol for headers with an id attribute and for selected text (Debug Mode)
-// @author       You
+// @version      1.6
+// @description  Display floating link symbol for headers with an id attribute and for selected text (Optimized for Bromite)
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
-// @grant        GM_setClipboard
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-function createAnchorIcon(element) {
+    function createAnchorIcon(element) {
         const anchor = document.createElement('a');
         anchor.href = `#${element.id}`;
         anchor.textContent = '🔗';
@@ -31,8 +29,9 @@ function createAnchorIcon(element) {
         anchor.addEventListener('click', (event) => {
             event.preventDefault();
             const fullUrl = `${window.location.origin}${window.location.pathname}#${element.id}`;
-            GM_setClipboard(fullUrl);
-            alert(`Copied link: ${fullUrl}`);
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                alert(`Copied link: ${fullUrl}`);
+            }).catch(err => console.error('Clipboard copy failed:', err));
         });
 
         element.style.position = 'relative'; // Ensure element has relative positioning
@@ -47,55 +46,52 @@ function createAnchorIcon(element) {
         });
     }
 
-    
     function createSelectionAnchorIcon(text) {
         const encodedText = encodeURIComponent(text.trim());
         const fullUrl = `${window.location.href}#:~:text=${encodedText}`;
         console.log('Selection URL:', fullUrl);
         
-        // Debugging display methods
-        // 1. Floating icon at bottom-left
-        const anchor1 = document.createElement('a');
-        anchor1.href = fullUrl;
-        anchor1.textContent = '🔗';
+        // 1. Floating button at bottom-right
+        const anchor1 = document.createElement('button');
+        anchor1.textContent = '🔗 Copy Selection Link';
         anchor1.style.position = 'fixed';
-        anchor1.style.left = '10px';
-        anchor1.style.bottom = '10px';
-        anchor1.style.fontSize = '16px';
+        anchor1.style.right = '20px';
+        anchor1.style.bottom = '20px';
+        anchor1.style.backgroundColor = '#28a745';
+        anchor1.style.color = 'white';
+        anchor1.style.padding = '10px';
+        anchor1.style.border = 'none';
+        anchor1.style.borderRadius = '5px';
         anchor1.style.cursor = 'pointer';
-        anchor1.style.backgroundColor = 'yellow';
-        anchor1.style.padding = '5px';
-        anchor1.style.border = '2px solid black';
         anchor1.style.zIndex = '10000';
         document.body.appendChild(anchor1);
         
-        // 2. Floating button at top-right
-        const anchor2 = document.createElement('button');
-        anchor2.textContent = '📌 Copy Selection Link';
+        // 2. Append a small notification in-page
+        const anchor2 = document.createElement('div');
+        anchor2.textContent = `🔗 Link copied! ${fullUrl}`;
         anchor2.style.position = 'fixed';
-        anchor2.style.right = '20px';
-        anchor2.style.top = '20px';
-        anchor2.style.backgroundColor = 'red';
-        anchor2.style.color = 'white';
-        anchor2.style.padding = '10px';
-        anchor2.style.border = 'none';
+        anchor2.style.left = '50%';
+        anchor2.style.top = '50px';
+        anchor2.style.transform = 'translateX(-50%)';
+        anchor2.style.backgroundColor = '#ffcc00';
+        anchor2.style.color = 'black';
+        anchor2.style.padding = '8px';
+        anchor2.style.border = '2px solid black';
         anchor2.style.borderRadius = '5px';
         anchor2.style.zIndex = '10000';
         document.body.appendChild(anchor2);
-        
-        // 3. Console log and alert popup
-        console.log('Anchor elements added');
-        alert(`Debug: Selection link generated: ${fullUrl}`);
 
-        // Click event handlers
-        [anchor1, anchor2].forEach(anchor => {
-            anchor.addEventListener('click', (event) => {
-                event.preventDefault();
-                GM_setClipboard(fullUrl);
+        // Click event handler
+        anchor1.addEventListener('click', () => {
+            navigator.clipboard.writeText(fullUrl).then(() => {
                 alert(`Copied link: ${fullUrl}`);
-            });
-            setTimeout(() => anchor.remove(), 15000); // Remove after 15 seconds
+            }).catch(err => console.error('Clipboard copy failed:', err));
         });
+        
+        setTimeout(() => {
+            anchor1.remove();
+            anchor2.remove();
+        }, 10000); // Remove after 10 seconds
     }
 
     document.addEventListener('mouseup', () => {
