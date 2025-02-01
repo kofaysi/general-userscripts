@@ -2,7 +2,7 @@
 // @name         Show Anchors on Page & Text Selection Links
 // @namespace    https://github.com/kofaysi/general-userscripts/
 // @version      1.1
-// @description  Display floating link symbol for elements with an id attribute and for selected text
+// @description  Display floating link symbol for headers with an id attribute and for selected text
 // @author       You
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -12,7 +12,7 @@
 (function() {
     'use strict';
 
-    function createAnchorIcon(element) {
+function createAnchorIcon(element) {
         const anchor = document.createElement('a');
         anchor.href = `#${element.id}`;
         anchor.textContent = '🔗';
@@ -40,7 +40,7 @@
     }
 
     function addAnchorIcons() {
-        document.querySelectorAll('[id]').forEach(element => {
+        document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(element => {
             if (!element.id.match(/^\s*$/)) { // Ensure id is not empty or just spaces
                 createAnchorIcon(element);
             }
