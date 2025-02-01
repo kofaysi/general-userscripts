@@ -47,12 +47,13 @@ function createAnchorIcon(element) {
         });
     }
 
+    
     function createSelectionAnchorIcon(text) {
         const encodedText = encodeURIComponent(text.trim());
         const fullUrl = `${window.location.href}#:~:text=${encodedText}`;
         console.log('Selection URL:', fullUrl);
         
-        // Create multiple debug display methods
+        // Debugging display methods
         // 1. Floating icon at bottom-left
         const anchor1 = document.createElement('a');
         anchor1.href = fullUrl;
@@ -60,46 +61,41 @@ function createAnchorIcon(element) {
         anchor1.style.position = 'fixed';
         anchor1.style.left = '10px';
         anchor1.style.bottom = '10px';
-        anchor1.style.textDecoration = 'none';
         anchor1.style.fontSize = '16px';
         anchor1.style.cursor = 'pointer';
-        anchor1.style.opacity = '0.6';
-        anchor1.style.backgroundColor = 'white';
+        anchor1.style.backgroundColor = 'yellow';
         anchor1.style.padding = '5px';
-        anchor1.style.borderRadius = '4px';
-        anchor1.style.boxShadow = '0px 0px 4px rgba(0,0,0,0.3)';
-        anchor1.title = 'Copy link to selection';
-
-        // 2. Floating button in center-bottom
+        anchor1.style.border = '2px solid black';
+        anchor1.style.zIndex = '10000';
+        document.body.appendChild(anchor1);
+        
+        // 2. Floating button at top-right
         const anchor2 = document.createElement('button');
         anchor2.textContent = '📌 Copy Selection Link';
         anchor2.style.position = 'fixed';
-        anchor2.style.left = '50%';
-        anchor2.style.bottom = '20px';
-        anchor2.style.transform = 'translateX(-50%)';
-        anchor2.style.backgroundColor = '#007bff';
+        anchor2.style.right = '20px';
+        anchor2.style.top = '20px';
+        anchor2.style.backgroundColor = 'red';
         anchor2.style.color = 'white';
-        anchor2.style.padding = '8px 12px';
+        anchor2.style.padding = '10px';
         anchor2.style.border = 'none';
         anchor2.style.borderRadius = '5px';
-        anchor2.style.cursor = 'pointer';
-        anchor2.style.boxShadow = '0px 4px 6px rgba(0,0,0,0.1)';
+        anchor2.style.zIndex = '10000';
+        document.body.appendChild(anchor2);
+        
+        // 3. Console log and alert popup
+        console.log('Anchor elements added');
+        alert(`Debug: Selection link generated: ${fullUrl}`);
 
+        // Click event handlers
         [anchor1, anchor2].forEach(anchor => {
-            anchor.addEventListener('mouseover', () => anchor.style.opacity = '1');
-            anchor.addEventListener('mouseout', () => anchor.style.opacity = '0.6');
             anchor.addEventListener('click', (event) => {
                 event.preventDefault();
                 GM_setClipboard(fullUrl);
                 alert(`Copied link: ${fullUrl}`);
             });
-            document.body.appendChild(anchor);
-            setTimeout(() => anchor.remove(), 10000); // Remove after 10 seconds
+            setTimeout(() => anchor.remove(), 15000); // Remove after 15 seconds
         });
-
-        // Additional debug display: console and alert
-        console.log('Anchor added to body');
-        alert(`Debug: Selection link generated: ${fullUrl}`);
     }
 
     document.addEventListener('mouseup', () => {
