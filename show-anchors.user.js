@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Show Anchors on Page & Text Selection Links
 // @namespace    https://github.com/kofaysi/general-userscripts/
-// @version      1.6
+// @version      1.7
 // @description  Display floating link symbol for headers with an id attribute and for selected text (Optimized for Bromite)
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -98,3 +98,4 @@
 
     window.addEventListener('load', addAnchorIcons);
 })();
+
