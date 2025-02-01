@@ -50,7 +50,9 @@ function createAnchorIcon(element) {
     function createSelectionAnchorIcon(text) {
         const encodedText = encodeURIComponent(text.trim());
         const fullUrl = `${window.location.href}#:~:text=${encodedText}`;
+        console.log('Selection URL:', fullUrl);
         
+        // Create multiple debug display methods
         const anchor = document.createElement('a');
         anchor.href = fullUrl;
         anchor.textContent = '🔗';
@@ -77,7 +79,11 @@ function createAnchorIcon(element) {
         });
         
         document.body.appendChild(anchor);
-        setTimeout(() => anchor.remove(), 5000); // Remove after 5 seconds
+        setTimeout(() => anchor.remove(), 10000); // Remove after 10 seconds
+
+        // Additional debug display: console and alert
+        console.log('Anchor added to body');
+        alert(`Debug: Selection link generated: ${fullUrl}`);
     }
 
     document.addEventListener('mouseup', () => {
