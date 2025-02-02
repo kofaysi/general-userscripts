@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Selected Text Overlay
 // @namespace    https://github.com/kofaysi/general-userscripts/
-// @version      1.3
+// @version      1.4
 // @description  Creates a floating button that copies the direct link to the selected text using the text fragment feature.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
@@ -37,8 +37,9 @@
 
         if (!selectedText) return;
 
-        const encodedText = encodeURIComponent(selectedText).replace(/%20/g, " ");
-        const selectionURL = `${window.location.href}#::text=${encodedText}`;
+        const encodedText = encodeURIComponent(selectedText).replace(/ /g, "%20");
+        const cleanURL = window.location.href.split('#')[0];
+        const selectionURL = `${cleanURL}#:~:text=${encodedText}`;
 
         const container = document.createElement('div');
         container.id = 'buttonContainerOverlay';
