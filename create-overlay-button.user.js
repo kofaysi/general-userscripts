@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Selected Text Overlay
 // @namespace    https://github.com/kofaysi/general-userscripts/
-// @version      1.2
-// @description  Creates a floating button that links directly to the selected text within the current page using the text fragment feature.
+// @version      1.3
+// @description  Creates a floating button that copies the direct link to the selected text using the text fragment feature.
 // @author       https://github.com/kofaysi/
 // @match        *://*/*
 // @grant        none
@@ -63,11 +63,15 @@
         innerContainer.style.pointerEvents = 'all';
         innerContainer.style.transform = 'scale(1)';
 
-        const linkButton = createButton('Link to Selection', () => {
-            alert(`Opening URL: ${selectionURL}`);
-            window.open(selectionURL, '_blank');
+        const copyButton = createButton('Copy Link', async () => {
+            try {
+                await navigator.clipboard.writeText(selectionURL);
+                alert('Link copied to clipboard: ' + selectionURL);
+            } catch (err) {
+                alert('Failed to copy link: ' + err);
+            }
         });
-        innerContainer.appendChild(linkButton);
+        innerContainer.appendChild(copyButton);
 
         container.appendChild(innerContainer);
         document.body.appendChild(container);
