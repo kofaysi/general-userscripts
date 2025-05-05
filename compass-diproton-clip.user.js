@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Path Converter [win]/[unix] Copier
-// @namespace    https://github.com/kofaysi/
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/compass-diproton-clip.user.js
 // @version      1.2
 // @description  Add [win] and [unix] links after any /compass or \\diproton path to copy transformed versions to clipboard
 // @author       https://github.com/kofaysi/
