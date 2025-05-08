@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MediaWiki Spellcheck Toggle
-// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/wiki-tok-ipp-spellchecker.user.js
+// @namespace    https://github.com/kofaysi/general-userscripts/blob/main/ipp.cas.cz-spellchecker.user.js
 // @version      1.1
 // @description  Toggle spellcheck mode on MediaWiki pages without editing
 // @author       https://github.com/kofaysi/
