@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Path Converter [win]/[unix] Copier
 // @namespace    https://github.com/kofaysi/general-userscripts/blob/main/compass-diproton-clip.user.js
-// @version      1.2
+// @version      1.2.1
 // @description  Add [win] and [unix] links after any /compass or \\diproton path to copy transformed versions to clipboard
 // @author       https://github.com/kofaysi/
 // @match        https://*.ipp.cas.cz/*
@@ -53,8 +53,8 @@
                 span.style.whiteSpace = 'pre';
 
                 frag.appendChild(span);
-                frag.appendChild(createCopyLink('win', parts[i]));
-                frag.appendChild(createCopyLink('unix', parts[i]));
+                frag.appendChild(createCopyLink('📋win', parts[i]));
+                frag.appendChild(createCopyLink('📋unix', parts[i]));
             }
         }
 
